@@ -18,11 +18,12 @@ public class ProductAspect {
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.getProduct(..))")
     public Object getProductFromCache(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Called getPerson() from aspect class");
+        log.info("Called getProductFromCache() from aspect class");
+
         Object[] args = pjp.getArgs();
         Long id = (Long) args[0];
         Product product = cache.get(id);
-        if(product != null){
+        if (product != null) {
             return product;
         }
         Product o = (Product) pjp.proceed();
@@ -33,7 +34,8 @@ public class ProductAspect {
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.addProduct(..))")
     public Object addProductInCache(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Called addPerson() from aspect class");
+        log.info("Called addProductInCache() from aspect class");
+
         Object[] args = pjp.getArgs();
         Product product = (Product) args[0];
         pjp.proceed();
@@ -45,7 +47,7 @@ public class ProductAspect {
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.removeProduct(..))")
     public Object removeProductFromCache(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Called deletePerson() from aspect class");
+        log.info("Called removeProductFromCache() from aspect class");
 
         Object[] args = pjp.getArgs();
         Long id = (Long) args[0];
@@ -57,7 +59,8 @@ public class ProductAspect {
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.updateProduct(..))")
     public Object updateProductInCache(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Called updatePerson() from aspect class");
+        log.info("Called updateProductInCache() from aspect class");
+
         Object[] args = pjp.getArgs();
         Product product = (Product) args[0];
         pjp.proceed();

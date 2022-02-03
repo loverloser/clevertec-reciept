@@ -20,10 +20,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     private ProductRepositoryImpl() {
     }
 
-    public static ProductRepositoryImpl getProductRepository() {
-        return PRODUCT_REPOSITORY;
-    }
-
     @Override
     public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
@@ -136,5 +132,9 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         return key;
+    }
+
+    public static ProductRepositoryImpl getProductRepository() {
+        return PRODUCT_REPOSITORY;
     }
 }

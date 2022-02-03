@@ -22,7 +22,7 @@ public class ConnectionManager {
 
     private static void loadDriver() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

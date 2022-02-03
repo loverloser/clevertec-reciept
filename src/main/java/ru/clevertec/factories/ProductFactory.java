@@ -1,9 +1,7 @@
 package ru.clevertec.factories;
 
-import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.ecxeptions.ProductNotFoundException;
 import ru.clevertec.entity.Product;
-import ru.clevertec.service.impl.DiscountCardServiceImpl;
 import ru.clevertec.service.impl.ProductServiceImpl;
 
 import java.util.Arrays;
