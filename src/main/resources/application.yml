@@ -1,0 +1,2 @@
+cache-size: 10
+cache-algorithm: LFU

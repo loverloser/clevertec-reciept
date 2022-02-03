@@ -1,39 +1,42 @@
 package ru.clevertec.factories;
 
-import ru.clevertec.ecxeptions.ProductCountException;
+import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.ecxeptions.ProductNotFoundException;
 import ru.clevertec.entity.Product;
+import ru.clevertec.service.impl.DiscountCardServiceImpl;
+import ru.clevertec.service.impl.ProductServiceImpl;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class ProductFactory {
-    public static Product getInstance(String line, Map<Integer, Product> products) throws ProductNotFoundException {
-        Product product = null;
-        String regex = "\\d+-\\d+";
-        if (line.matches(regex)) {
-            String[] split = line.split("-");
-            int id = Integer.parseInt(split[0]);
-            int count = Integer.parseInt(split[1]);
-            if (count < 1) {
-                try {
-                    throw new ProductCountException(count + "is incorrect value for count");
-                } catch (ProductCountException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                product = products.get(id);
-                if (Objects.nonNull(product)) {
-                    product.setCount(count);
-                } else {
+
+    private static final String productRegex = "(\\d+)-(\\d+)";
+    private static final ProductServiceImpl productService = new ProductServiceImpl();
+
+    public static Map<Product, Integer> getInstance(String[] args) throws ProductNotFoundException {
+        Map<Product,Integer> products = new HashMap<>();
+        List<String> productsValues = Arrays.stream(args)
+                .filter(s -> s.matches(productRegex))
+                .collect(Collectors.toList());
+
+        Pattern pattern = Pattern.compile(productRegex);
+        for (String productsValue : productsValues) {
+            Matcher matcher = pattern.matcher(productsValue);
+            if(matcher.find()){
+                Product product = productService.getProduct(Long.parseLong(matcher.group(1)));
+                if (product == null){
                     throw new ProductNotFoundException();
                 }
+                int count = Integer.parseInt(matcher.group(2));
+                products.put(product, count);
             }
-
-
         }
-
-
-        return product;
+        return products;
     }
 }

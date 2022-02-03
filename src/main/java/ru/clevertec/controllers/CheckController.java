@@ -4,7 +4,6 @@ import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.ecxeptions.ProductNotFoundException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.entity.Product;
-import ru.clevertec.factories.DiscountCardFactory;
 import ru.clevertec.factories.ReceiptFactory;
 import ru.clevertec.fill.Fill;
 
