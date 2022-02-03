@@ -25,7 +25,9 @@ public class ProductAspect {
         if(product != null){
             return product;
         }
-        return pjp.proceed();
+        Product o = (Product) pjp.proceed();
+        cache.put(id, o);
+        return o;
     }
 
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
@@ -44,6 +46,7 @@ public class ProductAspect {
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.removeProduct(..))")
     public Object removeProductFromCache(ProceedingJoinPoint pjp) throws Throwable {
         log.info("Called deletePerson() from aspect class");
+
         Object[] args = pjp.getArgs();
         Long id = (Long) args[0];
         pjp.proceed();
@@ -54,11 +57,12 @@ public class ProductAspect {
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
             "execution(public * ru.clevertec.service.impl.ProductServiceImpl.updateProduct(..))")
     public Object updateProductInCache(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Called putPerson() from aspect class");
+        log.info("Called updatePerson() from aspect class");
         Object[] args = pjp.getArgs();
         Product product = (Product) args[0];
         pjp.proceed();
         cache.put(product.getId(), product);
+
         return product.getId();
     }
 
