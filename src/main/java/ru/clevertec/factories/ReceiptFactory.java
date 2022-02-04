@@ -31,11 +31,13 @@ public final class ReceiptFactory {
         System.out.println(lineAndTitle);
 
         for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
-            String temp = String.format("%-5d%-17s$%-14.2f$%-11.2f%n", productIntegerEntry.getKey().getId(),
-                    productIntegerEntry.getKey().getName(),
-                    productIntegerEntry.getKey().getPrice(),
-                    productIntegerEntry.getKey().getTotal(productIntegerEntry.getValue()));
-            System.out.println(temp);
+            if (productIntegerEntry.getKey() != null) {
+                String temp = String.format("%-5d%-17s$%-14.2f$%-11.2f%n", productIntegerEntry.getKey().getId(),
+                        productIntegerEntry.getKey().getName(),
+                        productIntegerEntry.getKey().getPrice(),
+                        productIntegerEntry.getKey().getTotal(productIntegerEntry.getValue()));
+                System.out.println(temp);
+            }
         }
         System.out.println("------------------------------------------------\n");
 

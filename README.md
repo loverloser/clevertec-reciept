@@ -1,1 +1,1 @@
-# clevertec-reciept
+# Clevertec-reciept

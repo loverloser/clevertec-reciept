@@ -1,6 +1,7 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
+import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.DiscountCardRepository;
@@ -32,7 +33,11 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
                 discountCard = new DiscountCard(idDiscountCard, discount);
             }
 
-        } catch (SQLException throwables) {
+            if (discountCard == null){
+                throw new CardNotFoundException();
+            }
+
+        } catch (SQLException | CardNotFoundException throwables) {
             throwables.printStackTrace();
         }
 

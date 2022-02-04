@@ -1,6 +1,7 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
+import ru.clevertec.ecxeptions.ProductNotFoundException;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.ProductRepository;
 import ru.clevertec.sql.SqlRequests;
@@ -80,7 +81,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product = new Product(idProduct, name, price);
             }
 
-        } catch (SQLException throwables) {
+            if (product == null) {
+                throw new ProductNotFoundException();
+            }
+
+        } catch (SQLException | ProductNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
@@ -103,8 +108,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             if (keys.next()) {
                 key = keys.getLong(1);
+            } else {
+                throw new ProductNotFoundException();
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ProductNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
@@ -126,8 +133,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             if (keys.next()) {
                 key = keys.getLong(1);
+            } else {
+                throw new ProductNotFoundException();
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ProductNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
