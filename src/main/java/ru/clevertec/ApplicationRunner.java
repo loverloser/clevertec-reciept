@@ -11,7 +11,7 @@ import ru.clevertec.factories.ReceiptFactory;
 import java.util.Map;
 
 public class ApplicationRunner {
-    public static void main(String[] args) throws CardNotFoundException, ProductNotFoundException {
+    public static void main(String[] args) throws CardNotFoundException {
         DiscountCard discountCard = DiscountCardFactory.getInstance(args);
         Map<Product, Integer> products = ProductFactory.getInstance(args);
 
