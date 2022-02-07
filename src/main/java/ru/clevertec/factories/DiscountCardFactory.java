@@ -1,6 +1,5 @@
 package ru.clevertec.factories;
 
-import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.service.impl.DiscountCardServiceImpl;
 
@@ -13,11 +12,11 @@ public final class DiscountCardFactory {
     private static final String discountCardRegex = "card-(\\d+)";
     private static final DiscountCardServiceImpl discountCardService = new DiscountCardServiceImpl();
 
-    public static DiscountCard getInstance(String[] args) throws CardNotFoundException {
+    public static DiscountCard getInstance(String[] args) {
         String card = Arrays.stream(args)
                 .filter(s -> s.matches(discountCardRegex))
                 .findFirst()
-                .orElseThrow(CardNotFoundException::new);
+                .orElse("");
 
         Pattern pattern = Pattern.compile(discountCardRegex);
         Matcher matcher = pattern.matcher(card);

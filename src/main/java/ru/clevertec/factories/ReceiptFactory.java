@@ -45,9 +45,13 @@ public final class ReceiptFactory {
     }
 
     public static void writeFooter(Map<Product, Integer> products, DiscountCard discountCard) {
-        double total = products.entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getTotal(entry.getValue()))
-                .sum();
+//        double total = products.entrySet().stream()
+//                .mapToDouble(entry -> entry.getKey().getTotal(entry.getValue()))
+//                .sum();
+        double total = 0;
+        for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
+            total += productIntegerEntry.getKey().getTotal(productIntegerEntry.getValue());
+        }
         double discount = 0;
         if (Objects.nonNull(discountCard)) {
             discount = discountCard.getDiscount() * total;
