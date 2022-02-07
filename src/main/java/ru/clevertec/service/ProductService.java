@@ -12,7 +12,7 @@ public interface ProductService {
 
     Product getProduct(Long idProduct);
 
-    Long updateProduct(Product product);
+    boolean updateProduct(Product product);
 
-    Long removeProduct(Long idProduct);
+    boolean removeProduct(Long idProduct);
 }

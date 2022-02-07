@@ -16,7 +16,6 @@ public class ApplicationRunner {
         ReceiptFactory.writeHeader();
         ReceiptFactory.writeBody(products);
         ReceiptFactory.writeFooter(products, discountCard);
-
     }
 
 }

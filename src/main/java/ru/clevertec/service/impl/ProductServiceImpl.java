@@ -30,13 +30,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
-    public Long updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         return productRepository.updateProduct(product);
     }
 
     @Override
     @Cached
-    public Long removeProduct(Long idProduct) {
+    public boolean removeProduct(Long idProduct) {
         return productRepository.removeProduct(idProduct);
     }
 }

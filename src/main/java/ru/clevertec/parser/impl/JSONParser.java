@@ -13,78 +13,83 @@ public class JSONParser implements Parseable {
     @SneakyThrows
     private String choseParseWithField(Field field, Object o) {
         if (field.getType().isPrimitive()) {
-            return _parsePrimitiveAndWrappers(field, o);
+            return parsePrimitiveAndWrappers(field, o);
         } else if (field.getType().isArray()) {
-            return _parseArray(field, o);
+            return parseArray(field, o);
         } else if (Number.class.isAssignableFrom(field.getType())) {
-            return _parsePrimitiveAndWrappers(field, o);
+            return parsePrimitiveAndWrappers(field, o);
         } else if (String.class.isAssignableFrom(field.getType())) {
-            return _parseString(field, o);
+            return parseString(field, o);
         } else if (Iterable.class.isAssignableFrom(field.getType())) {
-            return _parseList(field, o);
+            return parseList(field, o);
         } else if (Map.class.isAssignableFrom(field.getType())) {
-            return _parseMap(field, o);
+            return parseMap(field, o);
         } else {
-            return _parseObject(field, o);
+            return parseObject(field, o);
         }
 
     }
 
     @SneakyThrows
-    private String _parsePrimitiveAndWrappers(Field field, Object o) {
+    private String parsePrimitiveAndWrappers(Field field, Object o) {
+        StringBuilder stringBuilder = new StringBuilder();
         if (char.class.isAssignableFrom(field.getType())) {
-            return "\"" + field.getName() + "\"" + ":\"" + field.get(o) + "\",";
+            return stringBuilder.append("\"").append(field.getName()).append("\"")
+                    .append(":\"").append(field.get(o)).append("\",").toString();
         }
-        return "\"" + field.getName() + "\"" + ":" + field.get(o) + ",";
+        return stringBuilder.append("\"").append(field.getName()).append("\":")
+                .append(field.get(o)).append(",").toString();
     }
 
     @SneakyThrows
-    private String _parseArray(Field field, Object o) {
-        Object[] array2 = new Object[Array.getLength(field.get(o))];
+    private String parseArray(Field field, Object o) {
+        Object[] objects = new Object[Array.getLength(field.get(o))];
         StringBuilder res = new StringBuilder("[");
-        for (int i = 0; i < array2.length; i++) {
-            array2[i] = Array.get(field.get(o), i);
+        for (int i = 0; i < objects.length; i++) {
+            objects[i] = Array.get(field.get(o), i);
         }
-        for (Object o1 : array2) {
-            res.append(__choseParse(o1)).append(",");
+        for (Object o1 : objects) {
+            res.append(choseParse(o1)).append(",");
         }
 
         return "\"" + field.getName() + "\":" + res.deleteCharAt(res.length() - 1).append("],");
     }
 
     @SneakyThrows
-    private String _parseMap(Field field, Object o) {
+    private String parseMap(Field field, Object o) {
         Map<?, ?> map = ((Map<?, ?>) field.get(o));
         StringBuilder str = new StringBuilder("{");
         for (Map.Entry<?, ?> entry : map.entrySet()) {
-            str.append(__choseParse(entry.getKey())).append(":");
-            str.append(__choseParse(entry.getValue())).append(",");
+            str.append(choseParse(entry.getKey())).append(":");
+            str.append(choseParse(entry.getValue())).append(",");
         }
 
         return "\"" + field.getName() + "\":" + str.deleteCharAt(str.length() - 1).append("},");
     }
 
     @SneakyThrows
-    private String _parseList(Field field, Object list) {
+    private String parseList(Field field, Object list) {
         StringBuilder res = new StringBuilder("[");
         List<?> listOfObjects = ((List<?>) field.get(list));
         for (Object o1 : listOfObjects) {
-            res.append(__choseParse(o1)).append(",");
+            res.append(choseParse(o1)).append(",");
         }
         return "\"" + field.getName() + "\":" + res.deleteCharAt(res.length() - 1).append("],");
     }
 
     @SneakyThrows
-    private String _parseString(Field field, Object o) {
+    private String parseString(Field field, Object o) {
         Object o1 = field.get(o);
+        StringBuilder sb = new StringBuilder();
         if (o1 == null) {
-            return "\"" + field.getName() + "\":" + null + ",";
+            return sb.append("\"").append(field.getName()).append("\":").toString() + null + ",";
         }
-        return "\"" + field.getName() + "\":" + "\"" + field.get(o) + "\",";
+        return sb.append("\"").append(field.getName()).append("\":")
+                .append("\"").append(field.get(o)).append("\",").toString();
     }
 
     @SneakyThrows
-    private String _parseObject(Field field, Object o) {
+    private String parseObject(Field field, Object o) {
         if (o == null) {
             return null;
         }
@@ -102,7 +107,7 @@ public class JSONParser implements Parseable {
         }
         result.deleteCharAt(result.length() - 1);
 
-        return "\"" + field.getName() + "\":" + result + "},";
+        return "\"" + field.getName() + "\":" + result.append("},");
     }
 
     @Override
@@ -121,57 +126,57 @@ public class JSONParser implements Parseable {
             declaredField.setAccessible(false);
         }
 
-        return result.deleteCharAt(result.length() - 1) + "}";
+        return result.deleteCharAt(result.length() - 1).append("}").toString();
     }
 
     @SneakyThrows
-    private String __parsePrimitiveAndWrappers(Object o) {
+    private String parsePrimitiveAndWrappers(Object o) {
         return o + "";
     }
 
     @SneakyThrows
-    private String __parseArray(Object o) {
+    private String parseArray(Object o) {
         Object[] array2 = new Object[Array.getLength(o)];
         StringBuilder res = new StringBuilder("[");
         for (int i = 0; i < array2.length; i++) {
             array2[i] = Array.get(o, i);
         }
         for (Object o1 : array2) {
-            res.append(__choseParse(o1)).append(",");
+            res.append(choseParse(o1)).append(",");
         }
 
         return res.deleteCharAt(res.length() - 1).append("]").toString();
     }
 
     @SneakyThrows
-    private String __parseMap(Object o) {
+    private String parseMap(Object o) {
         Map<?, ?> map = ((Map<?, ?>) o);
         StringBuilder str = new StringBuilder();
         for (Map.Entry<?, ?> entry : map.entrySet()) {
-            str.append(__choseParse(entry.getKey())).append(":");
-            str.append(__choseParse(entry.getValue())).append(",");
+            str.append(choseParse(entry.getKey())).append(":");
+            str.append(choseParse(entry.getValue())).append(",");
         }
 
         return str.deleteCharAt(str.length() - 1).append("}").toString();
     }
 
     @SneakyThrows
-    private String __parseList(Object o) {
+    private String parseList(Object o) {
         StringBuilder res = new StringBuilder("[");
         List<?> list = ((List<?>) (o));
         for (Object o1 : list) {
-            res.append("\"").append(__choseParse(o1)).append(",");
+            res.append("\"").append(choseParse(o1)).append(",");
         }
         return res.deleteCharAt(res.length() - 1).append("]").toString();
     }
 
     @SneakyThrows
-    private String __parseString(Object o) {
+    private String parseString(Object o) {
         return "\"" + o + "\"";
     }
 
     @SneakyThrows
-    public String __parseObject(Object o) {
+    public String parseObject(Object o) {
         if (o == null) {
             return null;
         }
@@ -188,25 +193,25 @@ public class JSONParser implements Parseable {
         }
         result.deleteCharAt(result.length() - 1);
 
-        return result + "}";
+        return result.append("}").toString();
     }
 
     @SneakyThrows
-    private String __choseParse(Object o) {
+    private String choseParse(Object o) {
         if (o.getClass().isPrimitive()) {
-            return __parsePrimitiveAndWrappers(o);
+            return parsePrimitiveAndWrappers(o);
         } else if (o.getClass().isArray()) {
-            return __parseArray(o);
+            return parseArray(o);
         } else if (Number.class.isAssignableFrom(o.getClass())) {
-            return __parsePrimitiveAndWrappers(o);
+            return parsePrimitiveAndWrappers(o);
         } else if (String.class.isAssignableFrom(o.getClass())) {
-            return __parseString(o);
+            return parseString(o);
         } else if (Iterable.class.isAssignableFrom(o.getClass())) {
-            return __parseList(o);
+            return parseList(o);
         } else if (Map.class.isAssignableFrom(o.getClass())) {
-            return __parseMap(o);
+            return parseMap(o);
         } else {
-            return __parseObject(o);
+            return parseObject(o);
         }
     }
 

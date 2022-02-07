@@ -93,8 +93,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Long updateProduct(Product product) {
-        Long key = null;
+    public boolean updateProduct(Product product) {
+        boolean isUpdated = false;
 
         try (Connection cn = ConnectionManager.getConnection();
              PreparedStatement ps = cn.prepareStatement(SqlRequests.UPDATE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
@@ -102,45 +102,37 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setDouble(2, product.getPrice());
             ps.setLong(3, product.getId());
 
-            ps.executeUpdate();
+            isUpdated =  ps.executeUpdate() != 0;
 
-            ResultSet keys = ps.getGeneratedKeys();
 
-            if (keys.next()) {
-                key = keys.getLong(1);
-            } else {
+            if (!isUpdated){
                 throw new ProductNotFoundException();
             }
         } catch (SQLException | ProductNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
-        return key;
+        return isUpdated;
     }
 
     @Override
-    public Long removeProduct(Long idProduct) {
-        Long key = null;
-
+    public boolean removeProduct(Long idProduct) {
+        boolean isRemoved = false;
         try (Connection cn = ConnectionManager.getConnection();
              PreparedStatement ps = cn.prepareStatement(SqlRequests.REMOVE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setLong(1, idProduct);
 
-            ps.executeUpdate();
+            isRemoved = ps.executeUpdate() != 0;
 
-            ResultSet keys = ps.getGeneratedKeys();
-
-            if (keys.next()) {
-                key = keys.getLong(1);
-            } else {
+            if (!isRemoved) {
                 throw new ProductNotFoundException();
             }
         } catch (SQLException | ProductNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
-        return key;
+        return isRemoved;
     }
 
     public static ProductRepositoryImpl getProductRepository() {
