@@ -27,7 +27,6 @@ public class JSONParser implements Parseable {
         } else {
             return parseObject(field, o);
         }
-
     }
 
     @SneakyThrows
