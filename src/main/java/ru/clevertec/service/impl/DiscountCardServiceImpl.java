@@ -6,7 +6,7 @@ import ru.clevertec.service.DiscountCardService;
 
 public class DiscountCardServiceImpl implements DiscountCardService {
 
-    private final DiscountCardRepositoryImpl discountCardRepository = DiscountCardRepositoryImpl.getInstance();
+    private final DiscountCardRepositoryImpl discountCardRepository = new DiscountCardRepositoryImpl();
 
     @Override
     public DiscountCard findById(Long idDiscountCard) {
