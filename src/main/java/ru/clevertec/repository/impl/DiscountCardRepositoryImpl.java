@@ -3,7 +3,6 @@ package ru.clevertec.repository.impl;
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeptions.CardNotFoundException;
 import ru.clevertec.entity.DiscountCard;
-import ru.clevertec.entity.Product;
 import ru.clevertec.repository.DiscountCardRepository;
 import ru.clevertec.sql.SqlRequests;
 
@@ -13,11 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
-
-    private static final DiscountCardRepositoryImpl DISCOUNT_CARD_REPOSITORY = new DiscountCardRepositoryImpl();
-
-    private DiscountCardRepositoryImpl() {
-    }
 
     @Override
     public DiscountCard findById(Long idDiscountCard) {
@@ -33,7 +27,7 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
                 discountCard = new DiscountCard(idDiscountCard, discount);
             }
 
-            if (discountCard == null){
+            if (discountCard == null) {
                 throw new CardNotFoundException();
             }
 
@@ -44,7 +38,4 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
         return discountCard;
     }
 
-    public static DiscountCardRepositoryImpl getInstance() {
-        return DISCOUNT_CARD_REPOSITORY;
-    }
 }

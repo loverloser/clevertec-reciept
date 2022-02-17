@@ -16,11 +16,6 @@ import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepository {
 
-    private static final ProductRepositoryImpl PRODUCT_REPOSITORY = new ProductRepositoryImpl();
-
-    private ProductRepositoryImpl() {
-    }
-
     @Override
     public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
@@ -135,7 +130,4 @@ public class ProductRepositoryImpl implements ProductRepository {
         return isRemoved;
     }
 
-    public static ProductRepositoryImpl getProductRepository() {
-        return PRODUCT_REPOSITORY;
-    }
 }

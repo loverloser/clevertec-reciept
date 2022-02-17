@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepositoryImpl productRepository = ProductRepositoryImpl.getProductRepository();
+    private final ProductRepositoryImpl productRepository = new ProductRepositoryImpl();
 
     @Override
     public List<Product> getAll() {
