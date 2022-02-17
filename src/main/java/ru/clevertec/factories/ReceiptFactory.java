@@ -24,28 +24,34 @@ public final class ReceiptFactory {
 
     }
 
-    public static void writeBody(Map<Integer, Product> products) {
+    public static void writeBody(Map<Product, Integer> products) {
         String lineAndTitle = String.format("------------------------------------------------\n" +
                                             "%-5s%-17s%-15s%-11s%n", "QTY", "Description", "Price", "Total");
 
         System.out.println(lineAndTitle);
 
-        for (Product value : products.values()) {
-            value.setTotal();
-            String temp = String.format("%-5d%-17s$%-14.2f$%-11.2f%n", value.getId(), value.getDescription(),
-                    value.getPrice(), value.getTotal());
-            System.out.println(temp);
+        for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
+            if (productIntegerEntry.getKey() != null) {
+                String temp = String.format("%-5d%-17s$%-14.2f$%-11.2f%n", productIntegerEntry.getKey().getId(),
+                        productIntegerEntry.getKey().getName(),
+                        productIntegerEntry.getKey().getPrice(),
+                        productIntegerEntry.getKey().getTotal(productIntegerEntry.getValue()));
+                System.out.println(temp);
+            }
         }
         System.out.println("------------------------------------------------\n");
 
 
     }
 
-    public static void writeFooter(Map<Integer, Product> products, DiscountCard discountCard) {
-        double total = products.values()
-                .stream()
-                .mapToDouble(Product::getTotal)
-                .sum();
+    public static void writeFooter(Map<Product, Integer> products, DiscountCard discountCard) {
+//        double total = products.entrySet().stream()
+//                .mapToDouble(entry -> entry.getKey().getTotal(entry.getValue()))
+//                .sum();
+        double total = 0;
+        for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
+            total += productIntegerEntry.getKey().getTotal(productIntegerEntry.getValue());
+        }
         double discount = 0;
         if (Objects.nonNull(discountCard)) {
             discount = discountCard.getDiscount() * total;
