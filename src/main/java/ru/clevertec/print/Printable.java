@@ -7,5 +7,5 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 public interface Printable {
-    void printInPDF(Map<Product, Integer> products, DiscountCard discountCard) throws FileNotFoundException;
+    void printPDF(Map<Product, Integer> products, DiscountCard discountCard);
 }

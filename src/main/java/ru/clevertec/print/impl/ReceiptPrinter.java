@@ -1,69 +1,148 @@
 package ru.clevertec.print.impl;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import lombok.SneakyThrows;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.entity.Product;
 import ru.clevertec.print.Printable;
 import ru.clevertec.util.ReceiptCalculateUtil;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Map;
 
-public class ReceiptPrinter implements Printable {
+public final class ReceiptPrinter implements Printable {
 
-    private static final Path TEMPLATE_FILE = Paths.get("src", "main",
+    private static final Path TEMPLATE_FILE_PATH = Paths.get("src", "main",
             "resources", "Clevertec_Template.pdf");
 
     public static final String FILE_FORMAT = ".pdf";
 
     @SneakyThrows
     @Override
-    public void printInPDF(Map<Product, Integer> products, DiscountCard discountCard) {
-//        LocalDateTime currentDateTime = LocalDateTime.now();
-//        final String filename = "sometext" + FILE_FORMAT;
-//        Path path = copyTemplateFile(filename);
-        String receipt = ReceiptCalculateUtil.getReceipt(products, discountCard);
-//        String res = receipt + receipt + receipt + receipt;
-//        Document document = new Document();
-//        PdfWriter instance = PdfWriter.getInstance(document, new FileOutputStream(path.toFile()));
-//        instance.add(new Paragraph(receipt));
-//        document.open();
-//
-//        Paragraph paragraph = new Paragraph(receipt);
-////        paragraph.setLeading(30);
-//
-//        paragraph.setSpacingBefore(317);
-//        document.add(paragraph);
-//
-//        document.close();
+    public void printPDF(Map<Product, Integer> products, DiscountCard discountCard) {
+        PdfDocument backPdfDocument = new PdfDocument(new PdfReader(TEMPLATE_FILE_PATH.toFile()));
+        LocalDateTime currentDate = LocalDateTime.now();
+        String filename = "Receipt:" + currentDate.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                          + FILE_FORMAT;
+        Path path = copyTemplateFile(filename);
+        PdfDocument receiptPdfDocument = new PdfDocument(new PdfWriter(path.toFile()));
+        receiptPdfDocument.addNewPage();
 
-//        Files.write(path, res.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+        Document document = new Document(receiptPdfDocument);
+        document.add(getInfoTable());
+        document.add(getProductsTable(products));
+        document.add(getInfoTotalPurchase(products, discountCard));
 
 
+        PdfCanvas canvas = new PdfCanvas(receiptPdfDocument.getFirstPage().newContentStreamBefore(),
+                receiptPdfDocument.getFirstPage().getResources(), receiptPdfDocument);
 
+        PdfFormXObject pdfFormXObject = backPdfDocument.getFirstPage().copyAsFormXObject(receiptPdfDocument);
+        canvas.addXObjectAt(pdfFormXObject, 0, 0);
 
+        backPdfDocument.close();
+        receiptPdfDocument.close();
+        document.close();
+    }
 
-        System.out.println(receipt);
+    private static Table getInfoTable() {
+        Table table = new Table(UnitValue.createPercentArray(4)).useAllAvailableWidth().setMarginTop(100);
 
+        table.setHorizontalAlignment(HorizontalAlignment.CENTER)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setWidth(UnitValue.createPercentValue(100))
+                .setFontSize(16f)
+                .setBorder(Border.NO_BORDER);
+
+        Cell cashReceipt = new Cell(1, 4)
+                .add(new Paragraph("======= CASH RECEIPT =======").setTextAlignment(TextAlignment.CENTER));
+        Cell qty = new Cell(1, 1)
+                .add(new Paragraph("QTY")).setTextAlignment(TextAlignment.CENTER);
+        Cell description = new Cell(1, 1)
+                .add(new Paragraph("DESCRIPTION")).setTextAlignment(TextAlignment.CENTER);
+        Cell price = new Cell(1, 1)
+                .add(new Paragraph("PRICE")).setTextAlignment(TextAlignment.CENTER);
+        Cell total = new Cell(1, 1)
+                .add(new Paragraph("TOTAL")).setTextAlignment(TextAlignment.CENTER);
+
+        table.addCell(cashReceipt);
+        table.addCell(qty);
+        table.addCell(description);
+        table.addCell(price);
+        table.addCell(total);
+
+        return table;
+    }
+
+    private static Table getProductsTable(Map<Product, Integer> products) {
+        Table tableProducts = new Table(UnitValue.createPercentArray(4)).useAllAvailableWidth();
+
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            Integer count = entry.getValue();
+            Cell qty = new Cell(1, 1)
+                    .add(new Paragraph(String.valueOf(count))).setTextAlignment(TextAlignment.CENTER);
+            Cell description = new Cell(1, 1)
+                    .add(new Paragraph(product.getName())).setTextAlignment(TextAlignment.CENTER);
+            Cell price = new Cell(1, 1)
+                    .add(new Paragraph(String.valueOf(product.getPrice()))).setTextAlignment(TextAlignment.CENTER);
+            Cell total = new Cell(1, 1)
+                    .add(new Paragraph(String.valueOf(product.getTotal(count)))).setTextAlignment(TextAlignment.CENTER);
+
+            tableProducts.addCell(qty);
+            tableProducts.addCell(description);
+            tableProducts.addCell(price);
+            tableProducts.addCell(total);
+        }
+
+        return tableProducts;
+    }
+
+    private static Table getInfoTotalPurchase(Map<Product, Integer> products, DiscountCard discountCard) {
+        Table totalPurchase = new Table(UnitValue.createPercentArray(1)).useAllAvailableWidth();
+        double total = ReceiptCalculateUtil.getTotal(products);
+        double discount = ReceiptCalculateUtil.getDiscount(discountCard, total);
+        Cell totalDiscount = new Cell(2, 2).
+                add(new Paragraph(String.format("Total discount with card: %.2f", discount)));
+        Cell card = new Cell(1, 1).add(
+                new Paragraph((discountCard != null) ? "Discount Card-" + discountCard.getId() : "isn't accepted"));
+        Cell totalPrice = new Cell(1, 1).add(new Paragraph(String.format("Total price: %.2f", total)));
+
+        totalPurchase.addCell(totalDiscount);
+        totalPurchase.addCell(card);
+        totalPurchase.addCell(totalPrice);
+
+        return totalPurchase;
     }
 
     private Path copyTemplateFile(String filename) {
         Path dest = Paths.get("src", "main", "java", "ru", "clevertec", "receipts", filename);
         try {
-            Files.copy(TEMPLATE_FILE, dest);
+            Files.copy(TEMPLATE_FILE_PATH, dest);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return dest;
     }
+
 }
