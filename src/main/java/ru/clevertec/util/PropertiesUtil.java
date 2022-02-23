@@ -12,6 +12,9 @@ public final class PropertiesUtil {
         loadProperties();
     }
 
+    private PropertiesUtil() {
+    }
+
     private static void loadProperties() {
         try (InputStream inputStream = PropertiesUtil.class
                 .getClassLoader()
@@ -20,9 +23,6 @@ public final class PropertiesUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private PropertiesUtil() {
     }
 
     public static String get(String key) {

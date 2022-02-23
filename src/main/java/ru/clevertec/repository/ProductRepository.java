@@ -3,6 +3,7 @@ package ru.clevertec.repository;
 import ru.clevertec.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository {
 
@@ -10,7 +11,7 @@ public interface ProductRepository {
 
     Long addProduct(Product product);
 
-    Product getProduct(Long idProduct);
+    Optional<Product> findById(Long idProduct);
 
     boolean updateProduct(Product product);
 
