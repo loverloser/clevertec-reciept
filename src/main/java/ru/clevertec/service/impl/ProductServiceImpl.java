@@ -1,15 +1,18 @@
 package ru.clevertec.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import ru.clevertec.annotation.Cached;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.ProductService;
 
 import java.util.List;
+import java.util.Optional;
 
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepositoryImpl productRepository = ProductRepositoryImpl.getProductRepository();
+    private final ProductRepositoryImpl productRepository;
 
     @Override
     public List<Product> getAll() {
@@ -24,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
-    public Product getProduct(Long idProduct) {
-        return productRepository.getProduct(idProduct);
+    public Optional<Product> getProduct(Long idProduct) {
+        return productRepository.findById(idProduct);
     }
 
     @Override

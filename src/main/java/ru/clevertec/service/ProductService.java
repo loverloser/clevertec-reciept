@@ -3,6 +3,7 @@ package ru.clevertec.service;
 import ru.clevertec.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -10,7 +11,7 @@ public interface ProductService {
 
     Long addProduct(Product product);
 
-    Product getProduct(Long idProduct);
+    Optional<Product> getProduct(Long idProduct);
 
     boolean updateProduct(Product product);
 

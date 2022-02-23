@@ -8,6 +8,8 @@ import ru.clevertec.caches.Cacheable;
 import ru.clevertec.entity.Product;
 import ru.clevertec.factories.AlgorithmConfigFactory;
 
+import java.util.Optional;
+
 
 @Log
 @Aspect
@@ -24,10 +26,11 @@ public class ProductAspect {
         Long id = (Long) args[0];
         Product product = cache.get(id);
         if (product != null) {
-            return product;
+            return Optional.of(product);
         }
-        Product o = (Product) pjp.proceed();
-        cache.put(id, o);
+        Optional<Product> o = (Optional<Product>) pjp.proceed();
+        o.ifPresent(value -> cache.put(id, value));
+
         return o;
     }
 

@@ -13,13 +13,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductRepositoryImpl implements ProductRepository {
-
-    private static final ProductRepositoryImpl PRODUCT_REPOSITORY = new ProductRepositoryImpl();
-
-    private ProductRepositoryImpl() {
-    }
 
     @Override
     public List<Product> getAll() {
@@ -67,7 +63,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getProduct(Long idProduct) {
+    public Optional<Product> findById(Long idProduct) {
         Product product = null;
         try (Connection cn = ConnectionManager.getConnection();
              PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_PRODUCT_BY_ID)) {
@@ -81,15 +77,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product = new Product(idProduct, name, price);
             }
 
-            if (product == null) {
-                throw new ProductNotFoundException();
-            }
-
-        } catch (SQLException | ProductNotFoundException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return product;
+        return Optional.ofNullable(product);
     }
 
     @Override
@@ -135,7 +127,4 @@ public class ProductRepositoryImpl implements ProductRepository {
         return isRemoved;
     }
 
-    public static ProductRepositoryImpl getProductRepository() {
-        return PRODUCT_REPOSITORY;
-    }
 }
