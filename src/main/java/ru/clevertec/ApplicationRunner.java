@@ -14,6 +14,7 @@ public class ApplicationRunner {
     public static void main(String[] args) {
         DiscountCard discountCard = DiscountCardFactory.getInstance(args);
         Map<Product, Integer> products = ProductFactory.getInstance(args);
+      
         ReceiptPDFPrinter receiptPDFPrinter = new ReceiptPDFPrinter();
         receiptPDFPrinter.print(products, discountCard);
 
