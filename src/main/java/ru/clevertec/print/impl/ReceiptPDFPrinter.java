@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Map;
 
-public final class ReceiptPrinter implements Printable {
+public class ReceiptPDFPrinter implements Printable {
 
     private static final Path TEMPLATE_FILE_PATH = Paths.get("src", "main",
             "resources", "Clevertec_Template.pdf");
@@ -38,7 +38,7 @@ public final class ReceiptPrinter implements Printable {
 
     @SneakyThrows
     @Override
-    public void printPDF(Map<Product, Integer> products, DiscountCard discountCard) {
+    public void print(Map<Product, Integer> products, DiscountCard discountCard) {
         PdfDocument backPdfDocument = new PdfDocument(new PdfReader(TEMPLATE_FILE_PATH.toFile()));
         LocalDateTime currentDate = LocalDateTime.now();
         String filename = "Receipt:" + currentDate.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
@@ -106,7 +106,7 @@ public final class ReceiptPrinter implements Printable {
             Cell price = new Cell(1, 1)
                     .add(new Paragraph(String.valueOf(product.getPrice()))).setTextAlignment(TextAlignment.CENTER);
             Cell total = new Cell(1, 1)
-                    .add(new Paragraph(String.valueOf(product.getTotal(count)))).setTextAlignment(TextAlignment.CENTER);
+                    .add(new Paragraph(String.format("%.2f", product.getTotal(count)))).setTextAlignment(TextAlignment.CENTER);
 
             tableProducts.addCell(qty);
             tableProducts.addCell(description);
@@ -125,7 +125,8 @@ public final class ReceiptPrinter implements Printable {
                 add(new Paragraph(String.format("Total discount with card: %.2f", discount)));
         Cell card = new Cell(1, 1).add(
                 new Paragraph((discountCard != null) ? "Discount Card-" + discountCard.getId() : "isn't accepted"));
-        Cell totalPrice = new Cell(1, 1).add(new Paragraph(String.format("Total price: %.2f", total)));
+        Cell totalPrice = new Cell(1, 1).add(new Paragraph(String.format("Total price: %.2f",
+                total - discount)));
 
         totalPurchase.addCell(totalDiscount);
         totalPurchase.addCell(card);

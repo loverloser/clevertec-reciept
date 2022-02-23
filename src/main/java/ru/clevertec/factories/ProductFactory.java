@@ -1,6 +1,8 @@
 package ru.clevertec.factories;
 
+import ru.clevertec.ecxeptions.ProductNotFoundException;
 import ru.clevertec.entity.Product;
+import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.impl.ProductServiceImpl;
 
 import java.util.Arrays;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 public final class ProductFactory {
 
     private static final String productRegex = "(\\d+)-(\\d+)";
-    private static final ProductServiceImpl productService = new ProductServiceImpl();
+    private static final ProductServiceImpl productService = new ProductServiceImpl(new ProductRepositoryImpl());
 
     public static Map<Product, Integer> getInstance(String[] args) {
         Map<Product, Integer> products = new HashMap<>();
@@ -26,9 +28,15 @@ public final class ProductFactory {
         for (String productsValue : productsValues) {
             Matcher matcher = pattern.matcher(productsValue);
             if (matcher.find()) {
-                Product product = productService.getProduct(Long.parseLong(matcher.group(1)));
                 int count = Integer.parseInt(matcher.group(2));
-                products.put(product, count);
+                try {
+                    Product product = productService
+                            .getProduct(Long.parseLong(matcher.group(1)))
+                            .orElseThrow(ProductNotFoundException::new);
+                    products.put(product, count);
+                } catch (ProductNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return products;

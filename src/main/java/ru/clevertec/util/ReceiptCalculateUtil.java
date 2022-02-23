@@ -8,9 +8,7 @@ import java.util.Objects;
 
 public final class ReceiptCalculateUtil {
 
-    private static final double VAL = 0.17;
-    private static final String TIME_FORMAT = "HH:mm:ss";
-    private static ReceiptCalculateUtil receiptCalculate;
+    public static final double VAL = 0.17;
 
     private ReceiptCalculateUtil() {
     }
