@@ -18,7 +18,7 @@ create table if not exists products
     price       real        not null,
     producer_id integer     not null
         constraint producer_id
-            references producers
+            references producers not null
 );
 
 insert into products (name, price, producer_id)
