@@ -2,6 +2,7 @@ package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeptions.ProductNotFoundException;
+import ru.clevertec.entity.Producer;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.ProductRepository;
 import ru.clevertec.sql.SqlRequests;
@@ -24,11 +25,15 @@ public class ProductRepositoryImpl implements ProductRepository {
              PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_ALL_PRODUCTS)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Long id = rs.getLong("id");
-                String name = rs.getString("name");
-                double price = rs.getDouble("price");
+                Long producerId = rs.getLong("producer_id");
+                String producerName = rs.getString("producer_name");
+                Producer producer = new Producer(producerId, producerName);
 
-                Product product = new Product(id, name, price);
+                Long productId = rs.getLong("id");
+                String productName = rs.getString("name");
+                double productPrice = rs.getDouble("price");
+
+                Product product = new Product(productId, productName, productPrice, producer);
                 products.add(product);
             }
 
@@ -71,10 +76,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setLong(1, idProduct);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                Long producerId = rs.getLong("producer_id");
+                String producerName = rs.getString("producer_name");
+                Producer producer = new Producer(producerId, producerName);
+
                 String name = rs.getString("name");
                 double price = rs.getDouble("price");
 
-                product = new Product(idProduct, name, price);
+                product = new Product(idProduct, name, price, producer);
             }
 
         } catch (SQLException throwables) {
@@ -93,6 +102,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setLong(3, product.getId());
+            ps.setLong(4, product.getProducer().getId());
 
             isUpdated =  ps.executeUpdate() != 0;
 
