@@ -136,7 +136,7 @@ public class ReceiptPDFPrinter implements Printable {
     }
 
     private Path copyTemplateFile(String filename) {
-        Path dest = Paths.get("src", "main", "java", "ru", "clevertec", "receipts", filename);
+        Path dest = Paths.get("src", "main", "resources", "receipts", filename);
         try {
             Files.copy(TEMPLATE_FILE_PATH, dest);
         } catch (IOException e) {

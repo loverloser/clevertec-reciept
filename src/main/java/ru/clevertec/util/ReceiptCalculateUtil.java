@@ -8,8 +8,6 @@ import java.util.Objects;
 
 public final class ReceiptCalculateUtil {
 
-    public static final double VAL = 0.17;
-
     private ReceiptCalculateUtil() {
     }
 

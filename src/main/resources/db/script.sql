@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS discount_cards;
+DROP TABLE IF EXISTS producers;
+
 CREATE TABLE IF NOT EXISTS producers
 (
     id   SERIAL PRIMARY KEY,
@@ -74,5 +78,6 @@ from products p
          JOIN producers p2 on p2.id = p.producer_id
 group by p2.name, p.producer_id
 having count(p.producer_id) > 1;
+
 
 
