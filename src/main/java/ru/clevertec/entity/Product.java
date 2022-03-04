@@ -12,6 +12,7 @@ public class Product {
     private Long id;
     private String name;
     private double price;
+    private Producer producer;
 
     public double getTotal(int count) {
         double total = this.price * count;

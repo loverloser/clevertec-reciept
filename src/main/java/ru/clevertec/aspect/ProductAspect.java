@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import ru.clevertec.caches.Cacheable;
 import ru.clevertec.entity.Product;
-import ru.clevertec.factories.AlgorithmConfigFactory;
+import ru.clevertec.factory.AlgorithmConfigFactory;
 
 import java.util.Optional;
 

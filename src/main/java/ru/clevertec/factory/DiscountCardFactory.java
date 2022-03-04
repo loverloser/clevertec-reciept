@@ -1,7 +1,7 @@
-package ru.clevertec.factories;
+package ru.clevertec.factory;
 
 import lombok.SneakyThrows;
-import ru.clevertec.ecxeptions.CardNotFoundException;
+import ru.clevertec.ecxeption.CardNotFoundException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.repository.impl.DiscountCardRepositoryImpl;
 import ru.clevertec.service.impl.DiscountCardServiceImpl;
