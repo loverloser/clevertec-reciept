@@ -1,4 +1,4 @@
-package ru.clevertec.ecxeptions;
+package ru.clevertec.ecxeption;
 
 public class CardNotFoundException extends Exception {
     public CardNotFoundException() {

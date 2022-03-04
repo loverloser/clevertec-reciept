@@ -1,4 +1,4 @@
-package ru.clevertec.ecxeptions;
+package ru.clevertec.ecxeption;
 
 public class ProductNotFoundException extends Exception {
     public ProductNotFoundException() {

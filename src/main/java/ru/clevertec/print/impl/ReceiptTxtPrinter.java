@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class ReceiptTxtPrinter implements Printable {
 
-    private static final Path FILE_PATH = Paths.get("src", "main", "java", "ru", "clevertec", "receipts",
+    private static final Path FILE_PATH = Paths.get("src", "main", "resources", "receipts",
             "Receipt:" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
             + ".txt");
 

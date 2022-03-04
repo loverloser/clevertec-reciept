@@ -1,6 +1,6 @@
-package ru.clevertec.factories;
+package ru.clevertec.factory;
 
-import ru.clevertec.ecxeptions.ProductNotFoundException;
+import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.impl.ProductServiceImpl;
