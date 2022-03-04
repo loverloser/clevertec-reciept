@@ -1,4 +1,4 @@
-package ru.clevertec.factories;
+package ru.clevertec.factory;
 
 
 import ru.clevertec.entity.DiscountCard;

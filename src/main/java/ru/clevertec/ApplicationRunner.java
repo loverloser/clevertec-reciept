@@ -2,8 +2,8 @@ package ru.clevertec;
 
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.entity.Product;
-import ru.clevertec.factories.DiscountCardFactory;
-import ru.clevertec.factories.ProductFactory;
+import ru.clevertec.factory.DiscountCardFactory;
+import ru.clevertec.factory.ProductFactory;
 import ru.clevertec.print.impl.ReceiptConsolePrinter;
 import ru.clevertec.print.impl.ReceiptPDFPrinter;
 import ru.clevertec.print.impl.ReceiptTxtPrinter;

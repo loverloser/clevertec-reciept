@@ -1,7 +1,7 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
-import ru.clevertec.ecxeptions.ProductNotFoundException;
+import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.entity.Producer;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.ProductRepository;

@@ -1,4 +1,4 @@
-package ru.clevertec.collections;
+package ru.clevertec.collection;
 
 import java.util.Arrays;
 import java.util.Collection;
