@@ -3,7 +3,7 @@ package ru.clevertec.service.impl;
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.annotation.Cached;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.impl.ProductRepositoryImpl;
+import ru.clevertec.repository.ProductRepository;
 import ru.clevertec.service.ProductService;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepositoryImpl productRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public List<Product> getAll() {

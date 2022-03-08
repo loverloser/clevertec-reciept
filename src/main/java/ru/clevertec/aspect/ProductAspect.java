@@ -54,9 +54,11 @@ public class ProductAspect {
 
         Object[] args = pjp.getArgs();
         Long id = (Long) args[0];
-        pjp.proceed();
-
-        return cache.remove(id);
+        boolean isRemove = (boolean) pjp.proceed();
+        if (isRemove){
+            cache.remove(id);
+        }
+        return isRemove;
     }
 
     @Around("@annotation(ru.clevertec.annotation.Cached) && " +
@@ -66,10 +68,12 @@ public class ProductAspect {
 
         Object[] args = pjp.getArgs();
         Product product = (Product) args[0];
-        pjp.proceed();
-        cache.put(product.getId(), product);
+        boolean isUpdate = (boolean) pjp.proceed();
+        if (isUpdate) {
+            cache.put(product.getId(), product);
+        }
 
-        return product.getId();
+        return isUpdate;
     }
 
 }
