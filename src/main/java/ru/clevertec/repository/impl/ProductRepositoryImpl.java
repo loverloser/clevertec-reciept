@@ -101,8 +101,8 @@ public class ProductRepositoryImpl implements ProductRepository {
              PreparedStatement ps = cn.prepareStatement(SqlRequests.UPDATE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
-            ps.setLong(3, product.getId());
-            ps.setLong(4, product.getProducer().getId());
+            ps.setLong(3, product.getProducer().getId());
+            ps.setLong(4, product.getId());
 
             isUpdated =  ps.executeUpdate() != 0;
 
