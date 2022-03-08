@@ -2,7 +2,7 @@ package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.entity.DiscountCard;
-import ru.clevertec.repository.impl.DiscountCardRepositoryImpl;
+import ru.clevertec.repository.DiscountCardRepository;
 import ru.clevertec.service.DiscountCardService;
 
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DiscountCardServiceImpl implements DiscountCardService {
 
-    private final DiscountCardRepositoryImpl discountCardRepository;
+    private final DiscountCardRepository discountCardRepository;
 
     @Override
     public Optional<DiscountCard> findById(Long idDiscountCard) {
