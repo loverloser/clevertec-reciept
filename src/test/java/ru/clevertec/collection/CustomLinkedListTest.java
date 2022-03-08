@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CustomLinkedListTest {
     private CustomLinkedList<String> list;
-    private CustomArrayList<String> emptyList;
+    private CustomLinkedList<String> emptyList;
 
     @BeforeEach
     void setUp() {
         list = new CustomLinkedList<>();
-        emptyList = new CustomArrayList<>();
+        emptyList = new CustomLinkedList<>();
         list.add("line1");
         list.add("line2");
         list.add(null);
