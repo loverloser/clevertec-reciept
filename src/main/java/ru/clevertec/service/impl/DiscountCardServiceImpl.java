@@ -3,7 +3,7 @@ package ru.clevertec.service.impl;
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.repository.DiscountCardRepository;
-import ru.clevertec.service.DiscountCardService;
+import ru.clevertec.service.interfaces.DiscountCardService;
 
 import java.util.Optional;
 

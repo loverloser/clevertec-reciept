@@ -45,26 +45,30 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Long addProduct(Product product) {
-        Long key = null;
+    public Product addProduct(Product product) {
+        Product result = null;
 
         try (Connection cn = ConnectionManager.getConnection();
              PreparedStatement ps = cn.prepareStatement(SqlRequests.ADD_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
+            ps.setLong(3, product.getProducer().getId());
 
-            ps.executeUpdate();
+            int isUpdate = ps.executeUpdate();
 
-            ResultSet keys = ps.getGeneratedKeys();
-
-            if (keys.next()) {
-                key = keys.getLong(1);
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (isUpdate == 1){
+                if (generatedKeys.next()) {
+                    product.setId(generatedKeys.getLong(1));
+                }
+                result = product;
             }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        return key;
+        return result;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public boolean updateProduct(Product product) {
+    public boolean updateProduct(Long id, Product product) {
         boolean isUpdated = false;
 
         try (Connection cn = ConnectionManager.getConnection();
@@ -102,7 +106,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setLong(3, product.getProducer().getId());
-            ps.setLong(4, product.getId());
+            ps.setLong(4, id);
 
             isUpdated =  ps.executeUpdate() != 0;
 

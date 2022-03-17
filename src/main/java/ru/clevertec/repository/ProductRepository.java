@@ -9,11 +9,11 @@ public interface ProductRepository {
 
     List<Product> getAll();
 
-    Long addProduct(Product product);
+    Product addProduct(Product product);
 
     Optional<Product> findById(Long idProduct);
 
-    boolean updateProduct(Product product);
+    boolean updateProduct(Long id, Product product);
 
     boolean removeProduct(Long idProduct);
 }

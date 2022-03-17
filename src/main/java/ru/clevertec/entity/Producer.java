@@ -8,4 +8,8 @@ import lombok.Data;
 public class Producer {
     private Long id;
     private String name;
+
+    public Producer(Long id) {
+        this.id = id;
+    }
 }
