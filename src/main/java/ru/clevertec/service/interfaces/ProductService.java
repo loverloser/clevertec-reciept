@@ -12,7 +12,7 @@ public interface ProductService {
 
     Product addProduct(Map<String, String> params);
 
-    Optional<Product> getProduct(Long idProduct);
+    Optional<Product> getProduct(String idProduct);
 
     boolean updateProduct(Map<String, String> params);
 

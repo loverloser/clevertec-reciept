@@ -4,7 +4,7 @@ import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.entity.Producer;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.ProductRepository;
+import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.sql.SqlRequests;
 
 import java.sql.Connection;

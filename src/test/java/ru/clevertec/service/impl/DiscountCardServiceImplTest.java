@@ -5,7 +5,7 @@
 //import org.mockito.Mockito;
 //import ru.clevertec.ecxeption.CardNotFoundException;
 //import ru.clevertec.entity.DiscountCard;
-//import ru.clevertec.repository.DiscountCardRepository;
+//import ru.clevertec.repository.interfaces.DiscountCardRepository;
 //import ru.clevertec.service.interfaces.DiscountCardService;
 //
 //import java.util.Optional;

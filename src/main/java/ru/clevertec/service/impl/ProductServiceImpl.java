@@ -5,7 +5,7 @@ import ru.clevertec.annotation.Cached;
 import ru.clevertec.constants.ApplicationConstants;
 import ru.clevertec.entity.Producer;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.ProductRepository;
+import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.service.interfaces.ProductService;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
-    public Optional<Product> getProduct(Long idProduct) {
-        return productRepository.findById(idProduct);
+    public Optional<Product> getProduct(String idProduct) {
+        return productRepository.findById(Long.parseLong(idProduct));
     }
 
     @Override

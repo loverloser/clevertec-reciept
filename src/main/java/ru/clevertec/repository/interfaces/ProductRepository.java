@@ -1,4 +1,4 @@
-package ru.clevertec.repository;
+package ru.clevertec.repository.interfaces;
 
 import ru.clevertec.entity.Product;
 

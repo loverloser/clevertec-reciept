@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface DiscountCardService {
 
-    Optional<DiscountCard> findById(Long idDiscountCard);
+    Optional<DiscountCard> findById(String idDiscountCard);
 }

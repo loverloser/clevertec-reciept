@@ -2,7 +2,7 @@ package ru.clevertec.controllers;
 
 import com.google.gson.Gson;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.ProductRepository;
+import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.interfaces.ProductService;
 import ru.clevertec.service.impl.ProductServiceImpl;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "GetAllProductsServlet", value = "/product/getAll")
+@WebServlet(name = "GetAllProductsServlet", value = "/product/get-all")
 public class GetAllProductServlet extends HttpServlet {
 
     private final ProductRepository productRepository;

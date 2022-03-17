@@ -25,14 +25,13 @@ public final class DiscountCardFactory {
 
         Pattern pattern = Pattern.compile(DISCOUNT_CARD_REGEX);
         Matcher matcher = pattern.matcher(card);
-        Long idDiscountCard = null;
+        String discountCardId = null;
         if (matcher.find()) {
-            String id = matcher.group(1);
-            idDiscountCard = Long.parseLong(id);
+            discountCardId = matcher.group(1);
         }
 
         return DISCOUNT_CARD_SERVICE
-                .findById(idDiscountCard)
+                .findById(discountCardId)
                 .orElseThrow(CardNotFoundException::new);
     }
 }

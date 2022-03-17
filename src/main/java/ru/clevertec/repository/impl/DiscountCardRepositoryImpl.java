@@ -2,7 +2,7 @@ package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.entity.DiscountCard;
-import ru.clevertec.repository.DiscountCardRepository;
+import ru.clevertec.repository.interfaces.DiscountCardRepository;
 import ru.clevertec.sql.SqlRequests;
 
 import java.sql.Connection;

@@ -2,7 +2,7 @@ package ru.clevertec.controllers;
 
 import com.google.gson.Gson;
 import ru.clevertec.constants.ApplicationConstants;
-import ru.clevertec.repository.ProductRepository;
+import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.impl.ProductServiceImpl;
 import ru.clevertec.service.interfaces.ProductService;
