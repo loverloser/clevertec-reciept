@@ -32,10 +32,10 @@ public class UpdateProductController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String> map = new HashMap<>();
-        map.put(ApplicationConstants.PRODUCT_ID_LABEL, req.getParameter("product_id"));
-        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID_LABEL, req.getParameter("product_producer_id"));
-        map.put(ApplicationConstants.PRODUCT_PRICE_LABEL, req.getParameter("product_price"));
-        map.put(ApplicationConstants.PRODUCT_NAME_LABEL, req.getParameter("product_name"));
+        map.put(ApplicationConstants.PRODUCT_ID, req.getParameter("product_id"));
+        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, req.getParameter("product_producer_id"));
+        map.put(ApplicationConstants.PRODUCT_PRICE, req.getParameter("product_price"));
+        map.put(ApplicationConstants.PRODUCT_NAME, req.getParameter("product_name"));
 
         boolean isAdd = productService.updateProduct(map);
         if (isAdd) {

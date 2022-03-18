@@ -3,8 +3,8 @@ package ru.clevertec.controllers;
 import com.google.gson.Gson;
 import ru.clevertec.constants.ApplicationConstants;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
+import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.service.impl.ProductServiceImpl;
 import ru.clevertec.service.interfaces.ProductService;
 
@@ -33,9 +33,9 @@ public class AddProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String> map = new HashMap<>();
-        map.put(ApplicationConstants.PRODUCT_NAME_LABEL, req.getParameter("product_name"));
-        map.put(ApplicationConstants.PRODUCT_PRICE_LABEL, req.getParameter("product_price"));
-        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID_LABEL, req.getParameter("product_producer_id"));
+        map.put(ApplicationConstants.PRODUCT_NAME, req.getParameter("product_name"));
+        map.put(ApplicationConstants.PRODUCT_PRICE, req.getParameter("product_price"));
+        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, req.getParameter("product_producer_id"));
         Product product = productService.addProduct(map);
         if (Objects.nonNull(product)) {
             try (PrintWriter writer = resp.getWriter()) {

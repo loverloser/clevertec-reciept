@@ -30,7 +30,7 @@ public class GetProductByIdController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String productId = request.getParameter("product_id");
-        Optional<Product> product = productService.getProduct(productId);
+        Optional<Product> product = productService.findById(productId);
         if (product.isPresent()){
             try (PrintWriter writer = response.getWriter()) {
                 Product result = product.get();

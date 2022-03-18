@@ -9,9 +9,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
+
+    @Override
+    public List<DiscountCard> getAll() {
+        return null;
+    }
 
     @Override
     public Optional<DiscountCard> findById(Long idDiscountCard) {
@@ -32,6 +38,21 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
         }
 
         return Optional.ofNullable(discountCard);
+    }
+
+    @Override
+    public DiscountCard addDiscountCard(DiscountCard discountCard) {
+        return null;
+    }
+
+    @Override
+    public boolean updateDiscountCard(Long id, DiscountCard discountCard) {
+        return false;
+    }
+
+    @Override
+    public boolean removeDiscountCard(Long idDiscountCard) {
+        return false;
     }
 
 }

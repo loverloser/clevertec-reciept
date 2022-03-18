@@ -2,7 +2,7 @@ package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeption.ProductNotFoundException;
-import ru.clevertec.entity.Producer;
+import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.sql.SqlRequests;
@@ -27,13 +27,13 @@ public class ProductRepositoryImpl implements ProductRepository {
             while (rs.next()) {
                 Long producerId = rs.getLong("producer_id");
                 String producerName = rs.getString("producer_name");
-                Producer producer = new Producer(producerId, producerName);
+                ProductProducer productProducer = new ProductProducer(producerId, producerName);
 
                 Long productId = rs.getLong("id");
                 String productName = rs.getString("name");
                 double productPrice = rs.getDouble("price");
 
-                Product product = new Product(productId, productName, productPrice, producer);
+                Product product = new Product(productId, productName, productPrice, productProducer);
                 products.add(product);
             }
 
@@ -52,7 +52,7 @@ public class ProductRepositoryImpl implements ProductRepository {
              PreparedStatement ps = cn.prepareStatement(SqlRequests.ADD_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
-            ps.setLong(3, product.getProducer().getId());
+            ps.setLong(3, product.getProductProducer().getId());
 
             int isUpdate = ps.executeUpdate();
 
@@ -82,12 +82,12 @@ public class ProductRepositoryImpl implements ProductRepository {
             if (rs.next()) {
                 Long producerId = rs.getLong("producer_id");
                 String producerName = rs.getString("producer_name");
-                Producer producer = new Producer(producerId, producerName);
+                ProductProducer productProducer = new ProductProducer(producerId, producerName);
 
                 String name = rs.getString("name");
                 double price = rs.getDouble("price");
 
-                product = new Product(idProduct, name, price, producer);
+                product = new Product(idProduct, name, price, productProducer);
             }
 
         } catch (SQLException throwables) {
@@ -105,7 +105,7 @@ public class ProductRepositoryImpl implements ProductRepository {
              PreparedStatement ps = cn.prepareStatement(SqlRequests.UPDATE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
-            ps.setLong(3, product.getProducer().getId());
+            ps.setLong(3, product.getProductProducer().getId());
             ps.setLong(4, id);
 
             isUpdated =  ps.executeUpdate() != 0;
