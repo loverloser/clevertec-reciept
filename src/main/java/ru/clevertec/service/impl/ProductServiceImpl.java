@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     private Product getProductFromParams(Map<String, String> params){
         Product product = new Product();
         if (params.containsKey(ApplicationConstants.PRODUCT_ID)){
-            Long id = Long.parseLong(ApplicationConstants.PRODUCT_ID);
+            Long id = Long.parseLong(params.get(ApplicationConstants.PRODUCT_ID));
             product.setId(id);
         }
 

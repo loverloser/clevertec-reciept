@@ -61,7 +61,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                 if (generatedKeys.next()) {
                     product.setId(generatedKeys.getLong(1));
                 }
-                result = product;
+                Optional<Product> maybeProduct = findById(product.getId());
+                if (maybeProduct.isPresent()){
+                    result =  maybeProduct.get();
+                }
             }
 
         } catch (SQLException throwables) {
