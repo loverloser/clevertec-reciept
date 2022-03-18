@@ -57,7 +57,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             int isUpdate = ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (isUpdate == 1){
+            if (isUpdate == 1) {
                 if (generatedKeys.next()) {
                     product.setId(generatedKeys.getLong(1));
                 }
@@ -108,10 +108,10 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setLong(3, product.getProductProducer().getId());
             ps.setLong(4, id);
 
-            isUpdated =  ps.executeUpdate() != 0;
+            isUpdated = ps.executeUpdate() != 0;
 
 
-            if (!isUpdated){
+            if (!isUpdated) {
                 throw new ProductNotFoundException();
             }
         } catch (SQLException | ProductNotFoundException throwables) {

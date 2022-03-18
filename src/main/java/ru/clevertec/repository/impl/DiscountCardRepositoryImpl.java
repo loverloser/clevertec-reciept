@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +18,20 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 
     @Override
     public List<DiscountCard> getAll() {
-        return null;
+        List<DiscountCard> discountCards = new ArrayList<>();
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlRequests.GET_ALL_DISCOUNT_CARDS)) {
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                double discount = resultSet.getDouble("discount");
+                discountCards.add(new DiscountCard(id, discount));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return discountCards;
     }
 
     @Override
@@ -42,17 +57,54 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 
     @Override
     public DiscountCard addDiscountCard(DiscountCard discountCard) {
-        return null;
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_DISCOUNT_CARD,
+                     Statement.RETURN_GENERATED_KEYS)) {
+            ps.setDouble(1, discountCard.getDiscount());
+
+            boolean isUpdate = ps.executeUpdate() == 1;
+            if (isUpdate) {
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    discountCard.setId(generatedKeys.getLong(1));
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return discountCard;
     }
 
     @Override
-    public boolean updateDiscountCard(Long id, DiscountCard discountCard) {
-        return false;
+    public boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) {
+        boolean isUpdate = false;
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlRequests.UPDATE_DISCOUNT_CARD)) {
+            ps.setDouble(1, discountCard.getDiscount());
+            ps.setDouble(2, idDiscountCard);
+            isUpdate = ps.executeUpdate() == 1;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isUpdate;
     }
 
     @Override
     public boolean removeDiscountCard(Long idDiscountCard) {
-        return false;
+        boolean isRemove = false;
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlRequests.REMOVE_DISCOUNT_CARD)) {
+            ps.setLong(1, idDiscountCard);
+            isRemove = ps.executeUpdate() == 1;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return isRemove;
     }
 
 }

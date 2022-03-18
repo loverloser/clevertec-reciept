@@ -45,6 +45,9 @@ public final class SqlRequests {
                                                       "from discount_cards\n" +
                                                       "where id = ?;";
 
+    public static final String ADD_DISCOUNT_CARD = "insert into discount_cards(discount)" +
+                                                   "values(?);";
+
     public static final String UPDATE_DISCOUNT_CARD = "update discount_cards\n" +
                                                       "set discount = ?\n" +
                                                       "where id = ?;";
@@ -56,6 +59,8 @@ public final class SqlRequests {
 
     public static final String GET_ALL_PRODUCT_PRODUCERS = "select id, name\n" +
                                                         "from product_producers;";
+    public static final String ADD_PRODUCT_PRODUCER = "insert into product_producers(name)" +
+                                                      "values (?)";
 
     public static final String REMOVE_PRODUCT_PRODUCER = "delete\n" +
                                                       "from product_producers\n" +

@@ -13,7 +13,7 @@ public interface DiscountCardRepository {
 
     DiscountCard addDiscountCard(DiscountCard discountCard);
 
-    boolean updateDiscountCard(Long id, DiscountCard discountCard);
+    boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard);
 
     boolean removeDiscountCard(Long idDiscountCard);
 }

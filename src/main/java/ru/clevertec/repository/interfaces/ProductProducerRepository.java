@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductProducerRepository {
+
     List<ProductProducer> getAll();
 
     ProductProducer addProductProducer(ProductProducer productProducer);
