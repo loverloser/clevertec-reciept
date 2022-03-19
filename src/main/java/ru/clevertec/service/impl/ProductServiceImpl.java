@@ -3,6 +3,8 @@ package ru.clevertec.service.impl;
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.annotation.Cached;
 import ru.clevertec.constants.ApplicationConstants;
+import ru.clevertec.ecxeption.RepositoryException;
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.entity.Product;
 import ru.clevertec.repository.interfaces.ProductRepository;
@@ -25,6 +27,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
+    public Optional<Product> findById(String idProduct) {
+        return productRepository.findById(Long.parseLong(idProduct));
+    }
+
+    @Override
+    @Cached
     public Product addProduct(Map<String, String> params) {
         Product product = getProductFromParams(params);
         return productRepository.addProduct(product);
@@ -32,26 +40,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
-    public Optional<Product> findById(String idProduct) {
-        return productRepository.findById(Long.parseLong(idProduct));
-    }
-
-    @Override
-    @Cached
-    public boolean updateProduct(Map<String, String> params) {
+    public boolean updateProduct(Map<String, String> params) throws ServiceException {
         Product product = getProductFromParams(params);
-        return productRepository.updateProduct(product.getId(), product);
+        try {
+            return productRepository.updateProduct(product.getId(), product);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
     @Cached
-    public boolean removeProduct(Long idProduct) {
-        return productRepository.removeProduct(idProduct);
+    public boolean removeProduct(Long idProduct) throws ServiceException {
+        try {
+            return productRepository.removeProduct(idProduct);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
-    private Product getProductFromParams(Map<String, String> params){
+    private Product getProductFromParams(Map<String, String> params) {
         Product product = new Product();
-        if (params.containsKey(ApplicationConstants.PRODUCT_ID)){
+        if (params.containsKey(ApplicationConstants.PRODUCT_ID)) {
             Long id = Long.parseLong(params.get(ApplicationConstants.PRODUCT_ID));
             product.setId(id);
         }

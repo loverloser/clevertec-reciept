@@ -1,6 +1,9 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
+import ru.clevertec.ecxeption.AddProductProducerException;
+import ru.clevertec.ecxeption.ProductProducerNotFoundException;
+import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.repository.interfaces.ProductProducerRepository;
 import ru.clevertec.sql.SqlRequests;
@@ -22,7 +25,7 @@ public class ProductProducerRepositoryImpl implements ProductProducerRepository 
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.GET_ALL_PRODUCT_PRODUCERS)) {
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
                 productProducers.add(new ProductProducer(id, name));
@@ -41,7 +44,7 @@ public class ProductProducerRepositoryImpl implements ProductProducerRepository 
 
             ps.setLong(1, idProductProducer);
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 String name = rs.getString("name");
                 productProducer = new ProductProducer(idProductProducer, name);
@@ -55,55 +58,63 @@ public class ProductProducerRepositoryImpl implements ProductProducerRepository 
     }
 
     @Override
-    public ProductProducer addProductProducer(ProductProducer productProducer) {
+    public ProductProducer addProductProducer(ProductProducer productProducer) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_PRODUCT_PRODUCER,
                      Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, productProducer.getName());
 
-            boolean isAdd = ps.executeUpdate() == 1;
-            if (isAdd) {
+            if (ps.executeUpdate() == 1) {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     productProducer.setId(generatedKeys.getLong(1));
                 }
+
+                return productProducer;
+            }else {
+                throw new AddProductProducerException();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+
+        } catch (SQLException | AddProductProducerException throwables) {
+            throw new RepositoryException(throwables);
         }
 
-        return productProducer;
     }
 
     @Override
-    public boolean updateProductProducer(Long id, ProductProducer productProducer) {
-        boolean isUpdate = false;
+    public boolean updateProductProducer(Long id, ProductProducer productProducer) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.UPDATE_PRODUCT_PRODUCER,
                      Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, productProducer.getName());
             ps.setLong(2, id);
 
-            isUpdate = ps.executeUpdate() == 1;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            if (ps.executeUpdate() == 1) {
+                return true;
+            } else {
+                throw new ProductProducerNotFoundException();
+            }
+        } catch (SQLException | ProductProducerNotFoundException throwables) {
+            throw new RepositoryException(throwables);
         }
-
-        return isUpdate;
     }
 
     @Override
-    public boolean removeProductProducer(Long idProductProducer) {
-        boolean isRemove = false;
+    public boolean removeProductProducer(Long idProductProducer) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.REMOVE_PRODUCT_PRODUCER)) {
+
             ps.setLong(1, idProductProducer);
-            isRemove = ps.executeUpdate() == 1;
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            if (ps.executeUpdate() == 1) {
+                return true;
+            } else {
+                throw new ProductProducerNotFoundException();
+            }
+
+        } catch (SQLException | ProductProducerNotFoundException throwables) {
+            throw new RepositoryException(throwables);
         }
-
-        return isRemove;
     }
 }

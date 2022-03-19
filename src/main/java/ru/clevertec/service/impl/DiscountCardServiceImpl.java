@@ -2,6 +2,8 @@ package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.constants.ApplicationConstants;
+import ru.clevertec.ecxeption.RepositoryException;
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.repository.interfaces.DiscountCardRepository;
 import ru.clevertec.service.interfaces.DiscountCardService;
@@ -26,20 +28,32 @@ public class DiscountCardServiceImpl implements DiscountCardService {
     }
 
     @Override
-    public boolean updateDiscountCard(Map<String, String> params) {
+    public boolean updateDiscountCard(Map<String, String> params) throws ServiceException {
         DiscountCard discountCard = getProductFromParams(params);
-        return discountCardRepository.updateDiscountCard(discountCard.getId(), discountCard);
+        try {
+            return discountCardRepository.updateDiscountCard(discountCard.getId(), discountCard);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public boolean removeDiscountCard(String idDiscountCard) {
-        return discountCardRepository.removeDiscountCard(Long.parseLong(idDiscountCard));
+    public boolean removeDiscountCard(String idDiscountCard) throws ServiceException {
+        try {
+            return discountCardRepository.removeDiscountCard(Long.parseLong(idDiscountCard));
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public DiscountCard addDiscountCard(Map<String, String> params) {
+    public DiscountCard addDiscountCard(Map<String, String> params) throws ServiceException {
         DiscountCard discountCard = getProductFromParams(params);
-        return discountCardRepository.addDiscountCard(discountCard);
+        try {
+            return discountCardRepository.addDiscountCard(discountCard);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     private DiscountCard getProductFromParams(Map<String, String> params){

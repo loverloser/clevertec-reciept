@@ -1,5 +1,6 @@
 package ru.clevertec.service.interfaces;
 
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.Product;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ProductService {
 
     Optional<Product> findById(String idProduct);
 
-    boolean updateProduct(Map<String, String> params);
+    boolean updateProduct(Map<String, String> params) throws ServiceException;
 
-    boolean removeProduct(Long idProduct);
+    boolean removeProduct(Long idProduct) throws ServiceException;
 }

@@ -1,5 +1,6 @@
 package ru.clevertec.repository.interfaces;
 
+import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.ProductProducer;
 
 import java.util.List;
@@ -9,11 +10,11 @@ public interface ProductProducerRepository {
 
     List<ProductProducer> getAll();
 
-    ProductProducer addProductProducer(ProductProducer productProducer);
-
     Optional<ProductProducer> findById(Long idProduct);
 
-    boolean updateProductProducer(Long id, ProductProducer productProducer);
+    ProductProducer addProductProducer(ProductProducer productProducer) throws RepositoryException;
 
-    boolean removeProductProducer(Long idProductProducer);
+    boolean updateProductProducer(Long id, ProductProducer productProducer) throws RepositoryException;
+
+    boolean removeProductProducer(Long idProductProducer) throws RepositoryException;
 }

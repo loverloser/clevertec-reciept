@@ -2,6 +2,8 @@ package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.clevertec.constants.ApplicationConstants;
+import ru.clevertec.ecxeption.RepositoryException;
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.repository.interfaces.ProductProducerRepository;
 import ru.clevertec.service.interfaces.ProductProducerService;
@@ -27,22 +29,34 @@ public class ProductProducerServiceImpl implements ProductProducerService {
     }
 
     @Override
-    public ProductProducer addProducer(Map<String, String> params) {
+    public ProductProducer addProducer(Map<String, String> params) throws ServiceException {
         ProductProducer productProducer = getProductProducerFromParams(params);
-        return productProducerRepository.addProductProducer(productProducer);
+        try {
+            return productProducerRepository.addProductProducer(productProducer);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public boolean updateProducer(Map<String, String> params) {
+    public boolean updateProducer(Map<String, String> params) throws ServiceException {
         ProductProducer productProducer = getProductProducerFromParams(params);
-        return productProducerRepository.updateProductProducer(productProducer.getId(),
-                productProducer);
+        try {
+            return productProducerRepository.updateProductProducer(productProducer.getId(),
+                    productProducer);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public boolean removeProducer(String idProducer) {
+    public boolean removeProducer(String idProducer) throws ServiceException {
         Long id = Long.parseLong(idProducer);
-        return productProducerRepository.removeProductProducer(id);
+        try {
+            return productProducerRepository.removeProductProducer(id);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     private ProductProducer getProductProducerFromParams(Map<String, String> params) {

@@ -1,5 +1,6 @@
 package ru.clevertec.service.interfaces;
 
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.ProductProducer;
 
 import java.util.List;
@@ -10,11 +11,11 @@ public interface ProductProducerService {
 
     List<ProductProducer> getAll();
 
-    ProductProducer addProducer(Map<String, String> params);
+    ProductProducer addProducer(Map<String, String> params) throws ServiceException;
 
     Optional<ProductProducer> findById(String idProducer);
 
-    boolean updateProducer(Map<String, String> params);
+    boolean updateProducer(Map<String, String> params) throws ServiceException;
 
-    boolean removeProducer(String idProducer);
+    boolean removeProducer(String idProducer) throws ServiceException;
 }

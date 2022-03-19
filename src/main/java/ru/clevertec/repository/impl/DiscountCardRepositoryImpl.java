@@ -1,6 +1,8 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
+import ru.clevertec.ecxeption.DiscountCardNotFoundException;
+import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.DiscountCard;
 import ru.clevertec.repository.interfaces.DiscountCardRepository;
 import ru.clevertec.sql.SqlRequests;
@@ -41,10 +43,10 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
              PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_DISCOUNT_CARD_BY_ID)) {
 
             ps.setLong(1, idDiscountCard);
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 double discount = rs.getDouble("discount");
-
                 discountCard = new DiscountCard(idDiscountCard, discount);
             }
 
@@ -56,55 +58,63 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
     }
 
     @Override
-    public DiscountCard addDiscountCard(DiscountCard discountCard) {
+    public DiscountCard addDiscountCard(DiscountCard discountCard) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_DISCOUNT_CARD,
                      Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setDouble(1, discountCard.getDiscount());
 
-            boolean isUpdate = ps.executeUpdate() == 1;
-            if (isUpdate) {
+            if (ps.executeUpdate() == 1) {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     discountCard.setId(generatedKeys.getLong(1));
                 }
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
-        return discountCard;
+                return discountCard;
+            }else {
+                throw new DiscountCardNotFoundException();
+            }
+        } catch (SQLException | DiscountCardNotFoundException throwables) {
+            throw new RepositoryException(throwables);
+        }
     }
 
     @Override
-    public boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) {
-        boolean isUpdate = false;
+    public boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.UPDATE_DISCOUNT_CARD)) {
+
             ps.setDouble(1, discountCard.getDiscount());
             ps.setDouble(2, idDiscountCard);
-            isUpdate = ps.executeUpdate() == 1;
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            if (ps.executeUpdate() == 1) {
+                return true;
+            }else {
+                throw new DiscountCardNotFoundException();
+            }
+
+        } catch (SQLException | DiscountCardNotFoundException throwables) {
+            throw new RepositoryException(throwables);
         }
-
-        return isUpdate;
     }
 
     @Override
-    public boolean removeDiscountCard(Long idDiscountCard) {
-        boolean isRemove = false;
+    public boolean removeDiscountCard(Long idDiscountCard) throws RepositoryException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.REMOVE_DISCOUNT_CARD)) {
+
             ps.setLong(1, idDiscountCard);
-            isRemove = ps.executeUpdate() == 1;
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            if (ps.executeUpdate() == 1) {
+                return true;
+            }else {
+                throw new DiscountCardNotFoundException();
+            }
+
+        } catch (SQLException | DiscountCardNotFoundException throwables) {
+            throw new RepositoryException(throwables);
         }
-
-        return isRemove;
     }
 
 }
