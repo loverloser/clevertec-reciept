@@ -59,6 +59,9 @@ public class DiscountCardServiceImpl implements DiscountCardService {
             discountCard.setId(id);
         }
 
+        for (Map.Entry<String, String> stringStringEntry : params.entrySet()) {
+            System.out.println(stringStringEntry.getKey() + " " + stringStringEntry.getValue());
+        }
         double discount = Double.parseDouble(params.get(ApplicationConstants.DISCOUNT_CARD_DISCOUNT));
         discountCard.setDiscount(discount);
         return discountCard;
