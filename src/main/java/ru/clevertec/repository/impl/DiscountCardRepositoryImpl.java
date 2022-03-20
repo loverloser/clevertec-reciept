@@ -58,7 +58,7 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
     }
 
     @Override
-    public DiscountCard addDiscountCard(DiscountCard discountCard) throws RepositoryException {
+    public Optional<DiscountCard> addDiscountCard(DiscountCard discountCard) {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_DISCOUNT_CARD,
                      Statement.RETURN_GENERATED_KEYS)) {
@@ -71,13 +71,12 @@ public class DiscountCardRepositoryImpl implements DiscountCardRepository {
                     discountCard.setId(generatedKeys.getLong(1));
                 }
 
-                return discountCard;
-            }else {
-                throw new DiscountCardNotFoundException();
             }
-        } catch (SQLException | DiscountCardNotFoundException throwables) {
-            throw new RepositoryException(throwables);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+
+        return Optional.ofNullable(discountCard);
     }
 
     @Override

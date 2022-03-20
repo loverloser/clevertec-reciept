@@ -11,7 +11,7 @@ public interface ProductService {
 
     List<Product> getAll();
 
-    Product addProduct(Map<String, String> params);
+    Optional<Product> addProduct(Map<String, String> params);
 
     Optional<Product> findById(String idProduct);
 

@@ -13,9 +13,9 @@ public interface DiscountCardService {
 
     Optional<DiscountCard> findById(String idDiscountCard);
 
+    Optional<DiscountCard> addDiscountCard(Map<String, String> params);
+
     boolean updateDiscountCard(Map<String, String> params) throws ServiceException;
 
     boolean removeDiscountCard(String idDiscountCard) throws ServiceException;
-
-    DiscountCard addDiscountCard(Map<String, String> params) throws ServiceException;
 }

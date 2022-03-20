@@ -12,7 +12,7 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long idProduct);
 
-    Product addProduct(Product product);
+    Optional<Product> addProduct(Product product);
 
     boolean updateProduct(Long id, Product product) throws RepositoryException;
 

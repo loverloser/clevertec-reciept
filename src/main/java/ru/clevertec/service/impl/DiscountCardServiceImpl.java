@@ -47,18 +47,14 @@ public class DiscountCardServiceImpl implements DiscountCardService {
     }
 
     @Override
-    public DiscountCard addDiscountCard(Map<String, String> params) throws ServiceException {
+    public Optional<DiscountCard> addDiscountCard(Map<String, String> params) {
         DiscountCard discountCard = getProductFromParams(params);
-        try {
-            return discountCardRepository.addDiscountCard(discountCard);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        }
+        return discountCardRepository.addDiscountCard(discountCard);
     }
 
-    private DiscountCard getProductFromParams(Map<String, String> params){
+    private DiscountCard getProductFromParams(Map<String, String> params) {
         DiscountCard discountCard = new DiscountCard();
-        if (params.containsKey(ApplicationConstants.DISCOUNT_CARD_ID)){
+        if (params.containsKey(ApplicationConstants.DISCOUNT_CARD_ID)) {
             Long id = Long.parseLong(params.get(ApplicationConstants.DISCOUNT_CARD_ID));
             discountCard.setId(id);
         }

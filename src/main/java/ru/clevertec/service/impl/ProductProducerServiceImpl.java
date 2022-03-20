@@ -29,13 +29,10 @@ public class ProductProducerServiceImpl implements ProductProducerService {
     }
 
     @Override
-    public ProductProducer addProducer(Map<String, String> params) throws ServiceException {
+    public Optional<ProductProducer> addProducer(Map<String, String> params) {
         ProductProducer productProducer = getProductProducerFromParams(params);
-        try {
-            return productProducerRepository.addProductProducer(productProducer);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        }
+        return productProducerRepository.addProductProducer(productProducer);
+
     }
 
     @Override

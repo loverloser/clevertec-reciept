@@ -12,7 +12,7 @@ public interface DiscountCardRepository {
 
     Optional<DiscountCard> findById(Long idDiscountCard);
 
-    DiscountCard addDiscountCard(DiscountCard discountCard) throws RepositoryException;
+    Optional<DiscountCard> addDiscountCard(DiscountCard discountCard);
 
     boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) throws RepositoryException;
 

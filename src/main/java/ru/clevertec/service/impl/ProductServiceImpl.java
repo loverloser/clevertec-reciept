@@ -5,8 +5,8 @@ import ru.clevertec.annotation.Cached;
 import ru.clevertec.constants.ApplicationConstants;
 import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.ecxeption.ServiceException;
-import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.entity.Product;
+import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.service.interfaces.ProductService;
 
@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cached
-    public Product addProduct(Map<String, String> params) {
+    public Optional<Product> addProduct(Map<String, String> params) {
         Product product = getProductFromParams(params);
         return productRepository.addProduct(product);
     }
@@ -41,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Cached
     public boolean updateProduct(Map<String, String> params) throws ServiceException {
-        Product product = getProductFromParams(params);
         try {
+            Product product = getProductFromParams(params);
             return productRepository.updateProduct(product.getId(), product);
         } catch (RepositoryException e) {
             throw new ServiceException(e);

@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 
 @WebServlet(name = "AddProductController", value = "/product/add")
 public class AddProductController extends HttpServlet {
@@ -36,8 +36,8 @@ public class AddProductController extends HttpServlet {
         map.put(ApplicationConstants.PRODUCT_NAME, req.getParameter("product_name"));
         map.put(ApplicationConstants.PRODUCT_PRICE, req.getParameter("product_price"));
         map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, req.getParameter("product_producer_id"));
-        Product product = productService.addProduct(map);
-        if (Objects.nonNull(product)) {
+        Optional<Product> product = productService.addProduct(map);
+        if (product.isPresent()) {
             try (PrintWriter writer = resp.getWriter()) {
                 String id = new Gson().toJson(product);
                 writer.write(id);

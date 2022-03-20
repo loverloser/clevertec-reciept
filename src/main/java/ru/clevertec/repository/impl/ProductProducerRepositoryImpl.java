@@ -1,7 +1,6 @@
 package ru.clevertec.repository.impl;
 
 import ru.clevertec.db.ConnectionManager;
-import ru.clevertec.ecxeption.AddProductProducerException;
 import ru.clevertec.ecxeption.ProductProducerNotFoundException;
 import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.ProductProducer;
@@ -58,7 +57,7 @@ public class ProductProducerRepositoryImpl implements ProductProducerRepository 
     }
 
     @Override
-    public ProductProducer addProductProducer(ProductProducer productProducer) throws RepositoryException {
+    public Optional<ProductProducer> addProductProducer(ProductProducer productProducer) {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_PRODUCT_PRODUCER,
                      Statement.RETURN_GENERATED_KEYS)) {
@@ -70,16 +69,13 @@ public class ProductProducerRepositoryImpl implements ProductProducerRepository 
                 if (generatedKeys.next()) {
                     productProducer.setId(generatedKeys.getLong(1));
                 }
-
-                return productProducer;
-            }else {
-                throw new AddProductProducerException();
             }
 
-        } catch (SQLException | AddProductProducerException throwables) {
-            throw new RepositoryException(throwables);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
+        return Optional.ofNullable(productProducer);
     }
 
     @Override

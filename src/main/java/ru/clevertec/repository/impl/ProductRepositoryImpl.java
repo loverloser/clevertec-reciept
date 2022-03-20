@@ -72,7 +72,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product addProduct(Product product) {
+    public Optional<Product> addProduct(Product product) {
         Product result = null;
 
         try (Connection cn = ConnectionManager.getConnection();
@@ -89,8 +89,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                     product.setId(generatedKeys.getLong(1));
                 }
                 Optional<Product> maybeProduct = findById(product.getId());
-                if (maybeProduct.isPresent()){
-                    result =  maybeProduct.get();
+                if (maybeProduct.isPresent()) {
+                    result = maybeProduct.get();
                 }
             }
             //TODO refactor this add code
@@ -99,7 +99,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             throwables.printStackTrace();
         }
 
-        return result;
+        return Optional.ofNullable(result);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             if (ps.executeUpdate() == 1) {
                 return true;
-            }else {
+            } else {
                 throw new ProductNotFoundException();
             }
         } catch (SQLException | ProductNotFoundException throwables) {
@@ -130,7 +130,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             if (ps.executeUpdate() == 1) {
                 return true;
-            }else {
+            } else {
                 throw new ProductNotFoundException();
             }
         } catch (SQLException | ProductNotFoundException throwables) {

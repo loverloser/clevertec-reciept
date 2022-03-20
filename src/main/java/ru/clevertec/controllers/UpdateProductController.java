@@ -1,7 +1,9 @@
 package ru.clevertec.controllers;
 
 import com.google.gson.Gson;
+import lombok.extern.java.Log;
 import ru.clevertec.constants.ApplicationConstants;
+import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.repository.impl.ProductRepositoryImpl;
 import ru.clevertec.service.impl.ProductServiceImpl;
@@ -17,6 +19,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Log
 @WebServlet(name = "UpdateProductController", value = "/product/update")
 public class UpdateProductController extends HttpServlet {
 
@@ -28,24 +31,28 @@ public class UpdateProductController extends HttpServlet {
         this.productService = new ProductServiceImpl(productRepository);
     }
 
-
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        boolean isUpdate = false;
         Map<String, String> map = new HashMap<>();
-        map.put(ApplicationConstants.PRODUCT_ID, req.getParameter("product_id"));
-        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, req.getParameter("product_producer_id"));
-        map.put(ApplicationConstants.PRODUCT_PRICE, req.getParameter("product_price"));
-        map.put(ApplicationConstants.PRODUCT_NAME, req.getParameter("product_name"));
+        map.put(ApplicationConstants.PRODUCT_ID, request.getParameter("product_id"));
+        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, request.getParameter("product_producer_id"));
+        map.put(ApplicationConstants.PRODUCT_PRICE, request.getParameter("product_price"));
+        map.put(ApplicationConstants.PRODUCT_NAME, request.getParameter("product_name"));
 
-        boolean isAdd = productService.updateProduct(map);
-        if (isAdd) {
-            try (PrintWriter writer = resp.getWriter()) {
+        try {
+            isUpdate = productService.updateProduct(map);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        try (PrintWriter writer = response.getWriter()) {
+            if (isUpdate) {
                 String result = new Gson().toJson(true);
                 writer.write(result);
-                resp.setStatus(200);
+            }else {
+                response.sendError(400, "Cannot update product.");
             }
-        }else {
-            resp.sendError(400, "Product hasn't updated.");
         }
 
     }

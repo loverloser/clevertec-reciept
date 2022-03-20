@@ -11,7 +11,7 @@ public interface ProductProducerService {
 
     List<ProductProducer> getAll();
 
-    ProductProducer addProducer(Map<String, String> params) throws ServiceException;
+    Optional<ProductProducer> addProducer(Map<String, String> params);
 
     Optional<ProductProducer> findById(String idProducer);
 
