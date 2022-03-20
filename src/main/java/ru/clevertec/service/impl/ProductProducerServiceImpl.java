@@ -63,6 +63,7 @@ public class ProductProducerServiceImpl implements ProductProducerService {
             productProducer.setId(id);
         }
 
+
         String name = params.get(ApplicationConstants.PRODUCT_PRODUCER_NAME);
         productProducer.setName(name);
         return productProducer;
