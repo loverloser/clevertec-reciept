@@ -66,7 +66,7 @@ public class ReceiptPDFPrinter implements Printable {
         receiptPdfDocument.close();
         document.close();
 
-        return FILE_FORMAT;
+        return path.toString();
     }
 
     private static Table getInfoTable() {
