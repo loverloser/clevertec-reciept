@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -33,9 +34,11 @@ public class AddProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String> map = new HashMap<>();
-        map.put(ApplicationConstants.PRODUCT_NAME, req.getParameter("product_name"));
-        map.put(ApplicationConstants.PRODUCT_PRICE, req.getParameter("product_price"));
-        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, req.getParameter("product_producer_id"));
+        BufferedReader reader = req.getReader();
+        Product fromJson = new Gson().fromJson(reader, Product.class);
+        map.put(ApplicationConstants.PRODUCT_NAME, fromJson.getName());
+        map.put(ApplicationConstants.PRODUCT_PRICE, String.valueOf(fromJson.getPrice()));
+        map.put(ApplicationConstants.PRODUCT_PRODUCER_ID, String.valueOf(fromJson.getProductProducer().getId()));
         Optional<Product> product = productService.addProduct(map);
         if (product.isPresent()) {
             try (PrintWriter writer = resp.getWriter()) {

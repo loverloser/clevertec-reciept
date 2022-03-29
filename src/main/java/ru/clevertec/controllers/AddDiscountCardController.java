@@ -11,6 +11,7 @@ import ru.clevertec.service.interfaces.DiscountCardService;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -31,8 +32,11 @@ public class AddDiscountCardController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String> params = new HashMap<>();
-        String discount = request.getParameter("discount");
-        params.put(ApplicationConstants.DISCOUNT_CARD_DISCOUNT, discount);
+        DiscountCard fromJson;
+        try (BufferedReader reader = request.getReader()) {
+            fromJson = new Gson().fromJson(reader, DiscountCard.class);
+        }
+        params.put(ApplicationConstants.DISCOUNT_CARD_DISCOUNT, String.valueOf(fromJson.getDiscount()));
         Optional<DiscountCard> discountCard = discountCardService.addDiscountCard(params);
         try (PrintWriter writer = response.getWriter()) {
             if (discountCard.isPresent()){
