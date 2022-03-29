@@ -26,13 +26,15 @@ public class ReceiptTxtPrinter implements Printable {
 
     @SneakyThrows
     @Override
-    public void print(Map<Product, Integer> products, DiscountCard discountCard) {
+    public String print(Map<Product, Integer> products, DiscountCard discountCard) {
         File file = FILE_PATH.toFile();
         if (file.createNewFile()) {
             writeHeader(file);
             writeBody(products, file);
             writeFooter(products, discountCard, file);
         }
+
+        return ".txt";
     }
 
     @SneakyThrows

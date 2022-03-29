@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.clevertec.entity.DiscountCard;
-import ru.clevertec.entity.Producer;
+import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.entity.Product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +21,7 @@ class JSONParserTest {
     void setUp() {
         objectMapper = new ObjectMapper();
         jsonParser = new JSONParser();
-        product = new Product(1L, "lemon", 12.99, new Producer(1L, "USA"));
+        product = new Product(1L, "lemon", 12.99, new ProductProducer(1L, "USA"));
         discountCard = new DiscountCard(1L, 13.5);
     }
 

@@ -13,10 +13,11 @@ import java.util.Map;
 public class ReceiptConsolePrinter implements Printable {
 
     @Override
-    public void print(Map<Product, Integer> products, DiscountCard discountCard) {
+    public String print(Map<Product, Integer> products, DiscountCard discountCard) {
         writeHeader();
         writeBody(products);
         writeFooter(products, discountCard);
+        return "";
     }
 
     public static void writeHeader() {
