@@ -1,7 +1,6 @@
 package ru.clevertec.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,7 @@ public class Product {
     private Long id;
     private String name;
     private double price;
-    private Producer producer;
+    private ProductProducer productProducer;
 
     public double getTotal(int count) {
         double total = this.price * count;

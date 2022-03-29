@@ -31,14 +31,17 @@ import java.util.Map;
 
 public class ReceiptPDFPrinter implements Printable {
 
-    private static final Path TEMPLATE_FILE_PATH = Paths.get("src", "main",
-            "resources", "Clevertec_Template.pdf");
+//    private static final Path TEMPLATE_FILE_PATH = Paths.get("src", "main",
+//            "resources", "Clevertec_Template.pdf");
 
+    private static final Path TEMPLATE_FILE_PATH = Paths.get("/Users/tsimafeilabanovich/Documents/Projects/" +
+                                                             "Clevertec/clevertec-reciept/src/main/resources/" +
+                                                             "Clevertec_Template.pdf");
     public static final String FILE_FORMAT = ".pdf";
 
     @SneakyThrows
     @Override
-    public void print(Map<Product, Integer> products, DiscountCard discountCard) {
+    public String print(Map<Product, Integer> products, DiscountCard discountCard) {
         PdfDocument backPdfDocument = new PdfDocument(new PdfReader(TEMPLATE_FILE_PATH.toFile()));
         LocalDateTime currentDate = LocalDateTime.now();
         String filename = "Receipt:" + currentDate.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
@@ -62,6 +65,8 @@ public class ReceiptPDFPrinter implements Printable {
         backPdfDocument.close();
         receiptPdfDocument.close();
         document.close();
+
+        return path.toString();
     }
 
     private static Table getInfoTable() {
@@ -136,7 +141,9 @@ public class ReceiptPDFPrinter implements Printable {
     }
 
     private Path copyTemplateFile(String filename) {
-        Path dest = Paths.get("src", "main", "resources", "receipts", filename);
+//        Path dest = Paths.get("src", "main", "resources", "receipts", filename);
+        Path dest = Paths.get("/Users/tsimafeilabanovich/Documents/Projects/Clevertec/clevertec-reciept/src/main/" +
+                              "resources/receipts/" + filename);
         try {
             Files.copy(TEMPLATE_FILE_PATH, dest);
         } catch (IOException e) {

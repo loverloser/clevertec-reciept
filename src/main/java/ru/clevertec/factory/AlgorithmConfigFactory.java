@@ -14,7 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class AlgorithmConfigFactory {
-    private static final String CONFIG_FILE_NAME = "src/main/resources/application.yml";
+//    private static final String CONFIG_FILE_NAME = "src/main/resources/application.yml";
+    private static final String CONFIG_FILE_NAME = "/Users/tsimafeilabanovich/Documents/Projects/Clevertec/clevertec-reciept/src/main/resources/application.yml";
     private static final String cacheSizeRegex = "cache-size:\\s(\\d+)";
     private static final String algorithmTypeRegex = "cache-algorithm:\\s(\\w{3})";
 

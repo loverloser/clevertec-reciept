@@ -31,7 +31,7 @@ public final class ProductFactory {
                 int count = Integer.parseInt(matcher.group(2));
                 try {
                     Product product = productService
-                            .getProduct(Long.parseLong(matcher.group(1)))
+                            .findById(matcher.group(1))
                             .orElseThrow(ProductNotFoundException::new);
                     products.put(product, count);
                 } catch (ProductNotFoundException e) {
