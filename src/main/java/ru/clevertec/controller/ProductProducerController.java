@@ -1,4 +1,4 @@
-package ru.clevertec.controllers;
+package ru.clevertec.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;

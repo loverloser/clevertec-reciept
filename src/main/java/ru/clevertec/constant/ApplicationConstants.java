@@ -1,4 +1,4 @@
-package ru.clevertec.constants;
+package ru.clevertec.constant;
 
 public final class ApplicationConstants {
 

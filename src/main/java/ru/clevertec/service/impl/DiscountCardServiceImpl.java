@@ -2,7 +2,7 @@ package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.clevertec.constants.ApplicationConstants;
+import ru.clevertec.constant.ApplicationConstants;
 import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.DiscountCard;
