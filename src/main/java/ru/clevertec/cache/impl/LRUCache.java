@@ -1,6 +1,6 @@
-package ru.clevertec.caches.impl;
+package ru.clevertec.cache.impl;
 
-import ru.clevertec.caches.Cacheable;
+import ru.clevertec.cache.Cacheable;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package ru.clevertec.factory;
 
-import ru.clevertec.caches.Cacheable;
-import ru.clevertec.caches.impl.LFUCache;
-import ru.clevertec.caches.impl.LRUCache;
+import ru.clevertec.cache.Cacheable;
+import ru.clevertec.cache.impl.LFUCache;
+import ru.clevertec.cache.impl.LRUCache;
 import ru.clevertec.entity.Product;
 
 import java.io.IOException;

@@ -1,6 +1,7 @@
 package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.clevertec.constants.ApplicationConstants;
 import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.ecxeption.ServiceException;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Service
 public class ProductProducerServiceImpl implements ProductProducerService {
 
     private final ProductProducerRepository productProducerRepository;

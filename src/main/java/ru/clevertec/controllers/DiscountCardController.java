@@ -20,7 +20,7 @@ public class DiscountCardController {
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    DiscountCard findById(@PathVariable String id){
+    public DiscountCard findById(@PathVariable String id){
         return discountCardService.findById(id)
                 .orElseThrow(DiscountCardNotFoundException::new);
     }

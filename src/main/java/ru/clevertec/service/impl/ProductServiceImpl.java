@@ -1,7 +1,7 @@
 package ru.clevertec.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import ru.clevertec.annotation.Cached;
+import org.springframework.stereotype.Service;
 import ru.clevertec.constants.ApplicationConstants;
 import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.ecxeption.ServiceException;
@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
 
     @Override
     public List<Product> getAll() {
@@ -26,20 +26,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cached
     public Optional<Product> findById(String idProduct) {
         return productRepository.findById(Long.parseLong(idProduct));
     }
 
     @Override
-    @Cached
     public Optional<Product> addProduct(Map<String, String> params) {
         Product product = getProductFromParams(params);
         return productRepository.addProduct(product);
     }
 
     @Override
-    @Cached
     public boolean updateProduct(Map<String, String> params) throws ServiceException {
         try {
             Product product = getProductFromParams(params);
@@ -50,7 +47,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cached
     public boolean removeProduct(Long idProduct) throws ServiceException {
         try {
             return productRepository.removeProduct(idProduct);

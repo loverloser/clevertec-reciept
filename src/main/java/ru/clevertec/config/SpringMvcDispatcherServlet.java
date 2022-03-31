@@ -6,12 +6,12 @@ public class SpringMvcDispatcherServlet extends AbstractAnnotationConfigDispatch
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{ApplicationConfig.class};
+        return new Class<?>[]{ApplicationConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{WebConfig.class};
+        return new Class<?>[]{WebConfig.class};
     }
 
     @Override
