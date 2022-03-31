@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "ru.clevertec")
-public class SpringConfig implements WebMvcConfigurer {
+@ComponentScan(basePackages = "ru.clevertec.controllers")
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
