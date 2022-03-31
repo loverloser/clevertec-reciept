@@ -1,23 +1,26 @@
 package ru.clevertec.factory;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 import ru.clevertec.ecxeption.CardNotFoundException;
 import ru.clevertec.entity.DiscountCard;
-import ru.clevertec.repository.impl.DiscountCardRepositoryImpl;
-import ru.clevertec.service.impl.DiscountCardServiceImpl;
+import ru.clevertec.service.interfaces.DiscountCardService;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@RequiredArgsConstructor
+@Component
 public final class DiscountCardFactory {
 
     private static final String DISCOUNT_CARD_REGEX = "card-(\\d+)";
-    private static final DiscountCardServiceImpl DISCOUNT_CARD_SERVICE =
-            new DiscountCardServiceImpl(new DiscountCardRepositoryImpl());
+    private final DiscountCardService discountCardService;
+
 
     @SneakyThrows
-    public static DiscountCard getInstance(String[] args) {
+    public DiscountCard getInstance(String[] args) {
         String card = Arrays.stream(args)
                 .filter(s -> s.matches(DISCOUNT_CARD_REGEX))
                 .findFirst()
@@ -30,8 +33,8 @@ public final class DiscountCardFactory {
             discountCardId = matcher.group(1);
         }
 
-        return DISCOUNT_CARD_SERVICE
-                .findById(discountCardId)
+        return discountCardService
+                .findById(Long.parseLong(discountCardId))
                 .orElseThrow(CardNotFoundException::new);
     }
 }

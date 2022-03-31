@@ -4,18 +4,17 @@ import ru.clevertec.ecxeption.ServiceException;
 import ru.clevertec.entity.ProductProducer;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface ProductProducerService {
 
     List<ProductProducer> getAll();
 
-    Optional<ProductProducer> addProducer(Map<String, String> params);
+    Optional<ProductProducer> addProducer(ProductProducer productProducer);
 
-    Optional<ProductProducer> findById(String idProducer);
+    Optional<ProductProducer> findById(Long idProducer);
 
-    boolean updateProducer(Map<String, String> params) throws ServiceException;
+    boolean updateProducer(Long id, ProductProducer productProducer) throws ServiceException;
 
-    boolean removeProducer(String idProducer) throws ServiceException;
+    boolean removeProducer(Long idProducer) throws ServiceException;
 }
