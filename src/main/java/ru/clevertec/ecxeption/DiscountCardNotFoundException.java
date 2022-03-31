@@ -1,6 +1,6 @@
 package ru.clevertec.ecxeption;
 
-public class DiscountCardNotFoundException extends Exception{
+public class DiscountCardNotFoundException extends RuntimeException{
     public DiscountCardNotFoundException() {
     }
 
