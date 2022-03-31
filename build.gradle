@@ -23,7 +23,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-all:1.10.19'
     testImplementation 'org.assertj:assertj-core:3.22.0'
 
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.60'
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'org.postgresql:postgresql:42.3.3'
