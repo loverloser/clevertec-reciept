@@ -31,9 +31,6 @@ import java.util.Map;
 
 public class ReceiptPDFPrinter implements Printable {
 
-//    private static final Path TEMPLATE_FILE_PATH = Paths.get("src", "main",
-//            "resources", "Clevertec_Template.pdf");
-
     private static final Path TEMPLATE_FILE_PATH = Paths.get("/Users/tsimafeilabanovich/Documents/Projects/" +
                                                              "Clevertec/clevertec-reciept/src/main/resources/" +
                                                              "Clevertec_Template.pdf");
@@ -141,9 +138,8 @@ public class ReceiptPDFPrinter implements Printable {
     }
 
     private Path copyTemplateFile(String filename) {
-//        Path dest = Paths.get("src", "main", "resources", "receipts", filename);
         Path dest = Paths.get("/Users/tsimafeilabanovich/Documents/Projects/Clevertec/clevertec-reciept/src/main/" +
-                              "resources/receipts/" + filename);
+                              "resources/receipt/" + filename);
         try {
             Files.copy(TEMPLATE_FILE_PATH, dest);
         } catch (IOException e) {

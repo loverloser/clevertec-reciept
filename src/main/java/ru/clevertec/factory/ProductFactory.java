@@ -1,9 +1,10 @@
 package ru.clevertec.factory;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.entity.Product;
-import ru.clevertec.repository.impl.ProductRepositoryImpl;
-import ru.clevertec.service.impl.ProductServiceImpl;
+import ru.clevertec.service.interfaces.ProductService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,12 +14,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+@Component
 public final class ProductFactory {
 
     private static final String productRegex = "(\\d+)-(\\d+)";
-    private static final ProductServiceImpl productService = new ProductServiceImpl(new ProductRepositoryImpl());
+    private final ProductService productService;
 
-    public static Map<Product, Integer> getInstance(String[] args) {
+    public Map<Product, Integer> getInstance(String[] args) {
         Map<Product, Integer> products = new HashMap<>();
         List<String> productsValues = Arrays.stream(args)
                 .filter(s -> s.matches(productRegex))
@@ -31,7 +34,7 @@ public final class ProductFactory {
                 int count = Integer.parseInt(matcher.group(2));
                 try {
                     Product product = productService
-                            .findById(matcher.group(1))
+                            .findById(Long.parseLong(matcher.group(1)))
                             .orElseThrow(ProductNotFoundException::new);
                     products.put(product, count);
                 } catch (ProductNotFoundException e) {

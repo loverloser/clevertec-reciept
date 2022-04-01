@@ -1,4 +1,4 @@
-package ru.clevertec.caches;
+package ru.clevertec.cache;
 
 public interface Cacheable<T> {
     T get(Long key);

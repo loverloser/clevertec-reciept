@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductProducer {
+
     private Long id;
     private String name;
-
-    public ProductProducer(Long id) {
-        this.id = id;
-    }
 }

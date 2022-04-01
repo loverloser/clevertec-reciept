@@ -1,5 +1,6 @@
 package ru.clevertec.repository.impl;
 
+import org.springframework.stereotype.Repository;
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeption.ProductProducerNotFoundException;
 import ru.clevertec.ecxeption.RepositoryException;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ProductProducerRepositoryImpl implements ProductProducerRepository {
 
     @Override
