@@ -1,121 +1,80 @@
 package ru.clevertec.repository.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.clevertec.db.ConnectionManager;
-import ru.clevertec.ecxeption.DiscountCardNotFoundException;
-import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.DiscountCard;
+import ru.clevertec.mapper.DiscountCardMapper;
 import ru.clevertec.repository.interfaces.DiscountCardRepository;
-import ru.clevertec.sql.SqlRequests;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+    private final DiscountCardMapper discountCardMapper = new DiscountCardMapper();
+
+    public static final String GET_DISCOUNT_CARDS_SQL = "select id, discount\n" +
+                                                        "from discount_cards;";
+
+    public static final String GET_DISCOUNT_CARD_BY_ID_SQL = "select id, discount\n" +
+                                                             "from discount_cards\n" +
+                                                             "where id = ?;";
+
+    public static final String ADD_DISCOUNT_CARD_SQL = "insert into discount_cards(discount)" +
+                                                       "values(?);";
+
+    public static final String REMOVE_DISCOUNT_CARD_SQL = "delete\n" +
+                                                          "from discount_cards\n" +
+                                                          "where id = ?;";
+
+    public static final String UPDATE_DISCOUNT_CARD_SQL = "update discount_cards\n" +
+                                                          "set discount = ?\n" +
+                                                          "where id = ?;";
 
     @Override
     public List<DiscountCard> getAll() {
-        List<DiscountCard> discountCards = new ArrayList<>();
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SqlRequests.GET_ALL_DISCOUNT_CARDS)) {
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                double discount = resultSet.getDouble("discount");
-                discountCards.add(new DiscountCard(id, discount));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return discountCards;
+        return jdbcTemplate.query(GET_DISCOUNT_CARDS_SQL, discountCardMapper);
     }
 
     @Override
     public Optional<DiscountCard> findById(Long idDiscountCard) {
-        DiscountCard discountCard = null;
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_DISCOUNT_CARD_BY_ID)) {
-
-            ps.setLong(1, idDiscountCard);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                double discount = rs.getDouble("discount");
-                discountCard = new DiscountCard(idDiscountCard, discount);
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return Optional.ofNullable(discountCard);
+        return jdbcTemplate.queryForStream(GET_DISCOUNT_CARD_BY_ID_SQL, discountCardMapper,
+                        new Object[]{idDiscountCard})
+                .findFirst();
     }
 
     @Override
     public Optional<DiscountCard> addDiscountCard(DiscountCard discountCard) {
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SqlRequests.ADD_DISCOUNT_CARD,
-                     Statement.RETURN_GENERATED_KEYS)) {
-
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(ADD_DISCOUNT_CARD_SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setDouble(1, discountCard.getDiscount());
+            return ps;
+        }, keyHolder);
 
-            if (ps.executeUpdate() == 1) {
-                ResultSet generatedKeys = ps.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    discountCard.setId(generatedKeys.getLong(1));
-                }
+        Long id = (Long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
+        discountCard.setId(id);
 
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return Optional.ofNullable(discountCard);
+        return Optional.of(discountCard);
     }
 
     @Override
-    public boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) throws RepositoryException {
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SqlRequests.UPDATE_DISCOUNT_CARD)) {
-
-            ps.setDouble(1, discountCard.getDiscount());
-            ps.setDouble(2, idDiscountCard);
-
-            if (ps.executeUpdate() == 1) {
-                return true;
-            }else {
-                throw new DiscountCardNotFoundException();
-            }
-
-        } catch (SQLException | DiscountCardNotFoundException throwables) {
-            throw new RepositoryException(throwables);
-        }
+    public boolean updateDiscountCard(Long idDiscountCard, DiscountCard discountCard) {
+        return jdbcTemplate.update(UPDATE_DISCOUNT_CARD_SQL, discountCard.getDiscount(), idDiscountCard) == 1;
     }
 
     @Override
-    public boolean removeDiscountCard(Long idDiscountCard) throws RepositoryException {
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SqlRequests.REMOVE_DISCOUNT_CARD)) {
-
-            ps.setLong(1, idDiscountCard);
-
-            if (ps.executeUpdate() == 1) {
-                return true;
-            }else {
-                throw new DiscountCardNotFoundException();
-            }
-
-        } catch (SQLException | DiscountCardNotFoundException throwables) {
-            throw new RepositoryException(throwables);
-        }
+    public boolean removeDiscountCard(Long idDiscountCard) {
+        return jdbcTemplate.update(REMOVE_DISCOUNT_CARD_SQL, idDiscountCard) == 1;
     }
 
 }
