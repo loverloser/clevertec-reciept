@@ -2,9 +2,9 @@ package ru.clevertec.validator;
 
 import java.util.Map;
 
-import static ru.clevertec.constants.ApplicationConstants.PRODUCT_NAME;
-import static ru.clevertec.constants.ApplicationConstants.PRODUCT_PRICE;
-import static ru.clevertec.constants.ApplicationConstants.PRODUCT_PRODUCER_ID;
+import static ru.clevertec.constant.ApplicationConstants.PRODUCT_NAME;
+import static ru.clevertec.constant.ApplicationConstants.PRODUCT_PRICE;
+import static ru.clevertec.constant.ApplicationConstants.PRODUCT_PRODUCER_ID;
 
 public class ProductValidator {
 

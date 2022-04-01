@@ -1,10 +1,11 @@
 package ru.clevertec.repository.impl;
 
+import org.springframework.stereotype.Repository;
 import ru.clevertec.db.ConnectionManager;
 import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.ecxeption.RepositoryException;
-import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.entity.Product;
+import ru.clevertec.entity.ProductProducer;
 import ru.clevertec.repository.interfaces.ProductRepository;
 import ru.clevertec.sql.SqlRequests;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
