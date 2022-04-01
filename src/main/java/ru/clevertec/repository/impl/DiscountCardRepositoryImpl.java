@@ -20,7 +20,7 @@ import java.util.Optional;
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final DiscountCardMapper discountCardMapper = new DiscountCardMapper();
+    private final DiscountCardMapper discountCardMapper;
 
     public static final String GET_DISCOUNT_CARDS_SQL = "select id, discount\n" +
                                                         "from discount_cards;";

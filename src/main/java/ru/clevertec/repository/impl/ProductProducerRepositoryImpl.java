@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ProductProducerRepositoryImpl implements ProductProducerRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final ProductProducerMapper productProducerMapper = new ProductProducerMapper();
+    private final ProductProducerMapper productProducerMapper;
 
     public static final String GET_PRODUCT_PRODUCER_BY_ID_SQL = "select id, name\n" +
                                                                 "from product_producers\n" +

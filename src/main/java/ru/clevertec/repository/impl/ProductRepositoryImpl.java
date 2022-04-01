@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final ProductMapper productMapper = new ProductMapper();
+    private final ProductMapper productMapper;
 
     public static final String GET_ALL_SQL = "select p.id,\n" +
                                              "       p.name,\n" +
