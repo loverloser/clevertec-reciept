@@ -1,143 +1,94 @@
 package ru.clevertec.repository.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.clevertec.db.ConnectionManager;
-import ru.clevertec.ecxeption.ProductNotFoundException;
-import ru.clevertec.ecxeption.RepositoryException;
 import ru.clevertec.entity.Product;
-import ru.clevertec.entity.ProductProducer;
+import ru.clevertec.mapper.ProductMapper;
 import ru.clevertec.repository.interfaces.ProductRepository;
-import ru.clevertec.sql.SqlRequests;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
+    private final JdbcTemplate jdbcTemplate;
+    private final ProductMapper productMapper;
+
+    public static final String GET_ALL_SQL = "select p.id,\n" +
+                                             "       p.name,\n" +
+                                             "       p.price,\n" +
+                                             "       p2.id as producer_id,\n" +
+                                             "       p2.name producer_name\n" +
+                                             "from products p\n" +
+                                             "         JOIN product_producers p2 on p2.id = p.producer_id;";
+
+    public static final String GET_PRODUCT_BY_ID_SQL = "select p.id,\n" +
+                                                       "       p.name,\n" +
+                                                       "       p.price,\n" +
+                                                       "       p2.id as producer_id,\n" +
+                                                       "       p2.name producer_name\n" +
+                                                       "from products p\n" +
+                                                       "         JOIN product_producers p2 on p2.id = p.producer_id\n" +
+                                                       "where p.id = ?;";
+
+    public static final String ADD_PRODUCT_SQL = "insert into products (name, price, producer_id)\n" +
+                                                 "values (?, ?, ?);";
+
+    public static final String REMOVE_PRODUCT_SQL = "delete\n" +
+                                                    "from products\n" +
+                                                    "where id = ?;";
+
+    public static final String UPDATE_PRODUCT_SQL = "update products\n" +
+                                                    "set name = ?,\n" +
+                                                    "    price = ?,\n" +
+                                                    "    producer_id = ?\n" +
+                                                    "    where id = ?;";
+
     @Override
     public List<Product> getAll() {
-        List<Product> products = new ArrayList<>();
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_ALL_PRODUCTS)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Long producerId = rs.getLong("producer_id");
-                String producerName = rs.getString("producer_name");
-                ProductProducer productProducer = new ProductProducer(producerId, producerName);
-
-                Long productId = rs.getLong("id");
-                String productName = rs.getString("name");
-                double productPrice = rs.getDouble("price");
-
-                Product product = new Product(productId, productName, productPrice, productProducer);
-                products.add(product);
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return products;
+        return jdbcTemplate.query(GET_ALL_SQL, productMapper);
     }
 
     @Override
     public Optional<Product> findById(Long idProduct) {
-        Product product = null;
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.GET_PRODUCT_BY_ID)) {
-
-            ps.setLong(1, idProduct);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Long producerId = rs.getLong("producer_id");
-                String producerName = rs.getString("producer_name");
-                ProductProducer productProducer = new ProductProducer(producerId, producerName);
-
-                String name = rs.getString("name");
-                double price = rs.getDouble("price");
-
-                product = new Product(idProduct, name, price, productProducer);
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return Optional.ofNullable(product);
+        return jdbcTemplate.queryForStream(GET_PRODUCT_BY_ID_SQL, productMapper, new Object[]{idProduct})
+                .findFirst();
     }
 
     @Override
     public Optional<Product> addProduct(Product product) {
-        Product result = null;
-
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.ADD_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(ADD_PRODUCT_SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setLong(3, product.getProductProducer().getId());
+            return ps;
+        }, keyHolder);
 
-            int isUpdate = ps.executeUpdate();
+        long id = ((Number) Objects.requireNonNull(keyHolder.getKeys()).get("id")).longValue();
+        product.setId(id);
 
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (isUpdate == 1) {
-                if (generatedKeys.next()) {
-                    product.setId(generatedKeys.getLong(1));
-                }
-                Optional<Product> maybeProduct = findById(product.getId());
-                if (maybeProduct.isPresent()) {
-                    result = maybeProduct.get();
-                }
-            }
-            //TODO refactor this add code
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return Optional.ofNullable(result);
+        return Optional.of(product);
     }
 
     @Override
-    public boolean updateProduct(Long id, Product product) throws RepositoryException {
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.UPDATE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setLong(3, product.getProductProducer().getId());
-            ps.setLong(4, id);
-
-            if (ps.executeUpdate() == 1) {
-                return true;
-            } else {
-                throw new ProductNotFoundException();
-            }
-        } catch (SQLException | ProductNotFoundException throwables) {
-            throw new RepositoryException(throwables);
-        }
+    public boolean updateProduct(Long id, Product product) {
+        return jdbcTemplate.update(UPDATE_PRODUCT_SQL, product.getName(), product.getPrice(),
+                product.getProductProducer().getId(), id) == 1;
     }
 
     @Override
-    public boolean removeProduct(Long idProduct) throws RepositoryException {
-        try (Connection cn = ConnectionManager.getConnection();
-             PreparedStatement ps = cn.prepareStatement(SqlRequests.REMOVE_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setLong(1, idProduct);
-
-            if (ps.executeUpdate() == 1) {
-                return true;
-            } else {
-                throw new ProductNotFoundException();
-            }
-        } catch (SQLException | ProductNotFoundException throwables) {
-            throw new RepositoryException(throwables);
-        }
+    public boolean removeProduct(Long idProduct) {
+        return jdbcTemplate.update(REMOVE_PRODUCT_SQL, idProduct) == 1;
     }
 
 }

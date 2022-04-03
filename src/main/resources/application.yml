@@ -1,2 +1,9 @@
 cache-size: 10
 cache-algorithm: LFU
+
+---
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/receipt_repository
+#    username: postgres
+#    password: loverloser

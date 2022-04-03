@@ -20,4 +20,5 @@ public class ApplicationConfig {
     public ObjectMapper mapper() {
         return new ObjectMapper();
     }
+
 }
