@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.clevertec.ecxeption.DiscountCardNotFoundException;
+import ru.clevertec.ecxeption.ProductNotFoundException;
 import ru.clevertec.entity.Product;
 import ru.clevertec.service.interfaces.ProductService;
 
@@ -29,7 +29,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public Product findById(@PathVariable Long id){
         return productService.findById(id)
-                .orElseThrow(DiscountCardNotFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     @GetMapping
@@ -41,7 +41,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product save(@RequestBody Product product){
         return productService.addProduct(product)
-                .orElseThrow(DiscountCardNotFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     @SneakyThrows
