@@ -1,7 +1,6 @@
 package ru.clevertec.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Log
 @RequiredArgsConstructor
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
@@ -76,7 +74,6 @@ public class ProductRepositoryImpl implements ProductRepository {
             return ps;
         }, keyHolder);
 
-        log.info(keyHolder.getKeys().keySet() + "");
         long id = ((Number) Objects.requireNonNull(keyHolder.getKeys()).get("id")).longValue();
         product.setId(id);
 

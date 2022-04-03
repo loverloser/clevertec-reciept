@@ -1,12 +1,14 @@
 package ru.clevertec.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ru.clevertec.entity.Product;
 import ru.clevertec.entity.ProductProducer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class ProductMapper implements RowMapper<Product> {
 
     @Override
