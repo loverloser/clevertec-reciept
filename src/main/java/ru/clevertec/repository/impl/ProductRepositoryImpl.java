@@ -76,7 +76,6 @@ public class ProductRepositoryImpl implements ProductRepository {
             return ps;
         }, keyHolder);
 
-        log.info(keyHolder.getKeys().keySet() + "");
         long id = ((Number) Objects.requireNonNull(keyHolder.getKeys()).get("id")).longValue();
         product.setId(id);
 
